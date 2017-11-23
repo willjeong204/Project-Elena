@@ -33,31 +33,53 @@ public class JavaApplication7 {
         // TODO code application logic here
         HttpURLConnection connection = null;
         StringBuilder result = new StringBuilder();
-        URL url = new URL("https://maps.googleapis.com/maps/api/geocode/json?address=1600+Amphitheatre+Parkway,+Mountain+View,+CA&key=AIzaSyDdmifSk9Ikxup4jhtnZ_dtglMK8KDYskA");
+        URL url = new URL("https://maps.googleapis.com/maps/api/directions/json?origin=hadley,MA,US&destination=Umass+amherst,MA,US&mode=bicycling&alternatives=true&key=AIzaSyDbJBCyTJBUmRSrlAOfzc4AbdjBqZgoSRU");
         connection = (HttpURLConnection) url.openConnection();
         connection.setRequestMethod("GET");
         
         BufferedReader rd = new BufferedReader(new InputStreamReader(connection.getInputStream()));
         String line;
+        
         while ((line = rd.readLine()) != null) 
         {
-        	result.append(line);       
+        	//System.out.println(line);       
+                result.append(line);
         }
       rd.close();
-      System.out.println(result.toString()); 
-      int responseCode = connection.getResponseCode();
-      System.out.println("Response Code : " + responseCode);
-      JSONObject jsonObject = new JSONObject(result.toString());
-      System.out.println(jsonObject.get("results").toString());      
       
-      JSONArray resultsArray=jsonObject.getJSONArray("results");
+      //System.out.println(result.toString()); 
+      //int responseCode = connection.getResponseCode();
+      //System.out.println("Response Code : " + responseCode);
+      JSONObject jsonObject = new JSONObject(result.toString());
+      //System.out.println(jsonObject.get("routes").toString());      
+      
+      JSONArray resultsArray=jsonObject.getJSONArray("routes");
+      System.out.println(resultsArray.length());
       for ( int i=0;i<resultsArray.length();i++){
-    	  JSONObject event=(JSONObject)resultsArray.get(i);
-    	  JSONObject geoObj = (JSONObject) event.get("geometry");
-    	  JSONObject boundsObj = (JSONObject) geoObj.get("bounds");
-    	  JSONObject northEastObj = (JSONObject) boundsObj.get("northeast");
-    	  Double latitude = (Double)northEastObj.get("lat");
-          System.out.println(latitude.toString());
+         
+    	  JSONObject routeObj=(JSONObject)resultsArray.get(i);
+          JSONArray legs = routeObj.getJSONArray("legs");
+          
+          for ( int j=0;j<legs.length();j++){
+              JSONObject legObj=(JSONObject)legs.get(j);
+              JSONArray steps = legObj.getJSONArray("steps");
+              
+              for ( int s=0;s<steps.length();s++){
+                  JSONObject stepObj=(JSONObject)steps.get(s);
+                  JSONObject start_location = (JSONObject)stepObj.get("start_location");
+                  Double latitude = start_location.getDouble("lat");
+                  Double longitude = start_location.getDouble("lng");
+                  System.out.println(latitude.toString());
+              }
+
+          }
+          
+    	  
+          //JSONObject legs = (JSONObject) event.get("legs");
+    	  //JSONObject steps = (JSONObject) legs.get("steps");
+    	  //JSONObject instructions = (JSONObject) steps.get("html_instructions");
+    	  //Double latitude = (Double)northEastObj.get("lat");
+          
       }
       
       
