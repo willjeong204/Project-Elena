@@ -34,8 +34,8 @@ public class JavaApplication7 {
 	
     public static void main(String[] args) throws MalformedURLException, IOException, JSONException {
         // TODO code application logic here
-    	String[][] arrays = new String[2000][];
-    	
+    	//String[][] arrays = new String[2000][];
+    	List<String> testArray = new ArrayList<String>();
         HttpURLConnection connection = null;
         
         StringBuilder result = new StringBuilder();
@@ -70,26 +70,23 @@ public class JavaApplication7 {
       
       JSONArray resultsArray=jsonObject.getJSONArray("routes");
       System.out.println(resultsArray.length());
+      String x=null;
       for ( int i=0;i<resultsArray.length();i++){
-    	  String x = null;
-    	  List<String> testArray = new ArrayList<String>();
+    	  
+    	  
     	  JSONObject routeObj=(JSONObject)resultsArray.get(i);
           JSONArray legs = routeObj.getJSONArray("legs");
           
           for ( int j=0;j<legs.length();j++){
               JSONObject legObj=(JSONObject)legs.get(j);
               JSONArray steps = legObj.getJSONArray("steps");
-              
               for ( int s=0;s<steps.length();s++){
                   JSONObject stepObj=(JSONObject)steps.get(s);
                   JSONObject start_location = (JSONObject)stepObj.get("start_location");
                   Double latitude = start_location.getDouble("lat");
                   Double longitude = start_location.getDouble("lng");
                   String lat=latitude.toString();
-                  String lng=latitude.toString();
-                  testArray.add(latitude.toString());
-                  testArray.add(longitude.toString());
-                  testArray.add("|");
+                  String lng=longitude.toString();
                   if (x==null){
                 	  x=lat.concat(",").concat(lng).concat("|");
                   }else{
@@ -97,17 +94,21 @@ public class JavaApplication7 {
                   }
                   
               }
+              x= x.substring(0, x.length() - 1);
+              testArray.add(x);
+              System.out.println(x); 
+              x=null;
+                       
 
           }
-          //System.out.println(testArray);
-          x= x.substring(0, x.length() - 1);
-          System.out.println(x);
-          HttpURLConnection elevationConnection = null;
-          
+      }
+      System.out.println(testArray); 
+      for (int a =0;a<testArray.size();a++){
+          HttpURLConnection elevationConnection = null;          
           StringBuilder eleResult = new StringBuilder();
           String eleBase_url = "https://maps.googleapis.com/maps/api/elevation/json?";
           String elekey = "&key=AIzaSyAqlZ9cPy0XZ0oPiW8p9c8t6r_8s2lWtIM";
-          String locations = "&locations="+x;
+          String locations = "&locations="+testArray.get(a);
           String eleFull_url = eleBase_url+locations+elekey;
           
           URL eleUrl = new URL(eleFull_url);
@@ -124,7 +125,8 @@ public class JavaApplication7 {
         	  eleResult.append(eleLine);
         	  System.out.println(eleLine);  
           }
-        rd.close();
+          ele_rd.close();
+          
     	  //System.out.println(eleResult.toString());
           //JSONObject legs = (JSONObject) event.get("legs");
     	  //JSONObject steps = (JSONObject) legs.get("steps");
