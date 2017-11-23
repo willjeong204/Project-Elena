@@ -33,7 +33,15 @@ public class JavaApplication7 {
         // TODO code application logic here
         HttpURLConnection connection = null;
         StringBuilder result = new StringBuilder();
-        URL url = new URL("https://maps.googleapis.com/maps/api/directions/json?origin=hadley,MA,US&destination=Umass+amherst,MA,US&mode=bicycling&alternatives=true&key=AIzaSyDbJBCyTJBUmRSrlAOfzc4AbdjBqZgoSRU");
+        String base_url = "https://maps.googleapis.com/maps/api/directions/json?";
+        String origin = "origin="+"hadley,MA,US";
+        String destination = "&destination="+"Umass+amherst,MA,US";
+        String mode = "&mode=bicycling";
+        String alternatives = "&alternatives=true";
+        String key = "&key=AIzaSyDbJBCyTJBUmRSrlAOfzc4AbdjBqZgoSRU";
+        String full_url = base_url+origin+destination+mode+alternatives+key;
+        
+        URL url = new URL(full_url);
         connection = (HttpURLConnection) url.openConnection();
         connection.setRequestMethod("GET");
         
