@@ -35,7 +35,7 @@ public class JavaApplication7 {
     public static void main(String[] args) throws MalformedURLException, IOException, JSONException {
         // TODO code application logic here
     	String[][] arrays = new String[2000][];
-    	//List<List<String>> listOfLists = Lists.newArrayList();
+    	
         HttpURLConnection connection = null;
         
         StringBuilder result = new StringBuilder();
@@ -71,7 +71,8 @@ public class JavaApplication7 {
       JSONArray resultsArray=jsonObject.getJSONArray("routes");
       System.out.println(resultsArray.length());
       for ( int i=0;i<resultsArray.length();i++){
-    	  List<Double> testArray = new ArrayList<Double>();
+    	  String x = null;
+    	  List<String> testArray = new ArrayList<String>();
     	  JSONObject routeObj=(JSONObject)resultsArray.get(i);
           JSONArray legs = routeObj.getJSONArray("legs");
           
@@ -84,13 +85,47 @@ public class JavaApplication7 {
                   JSONObject start_location = (JSONObject)stepObj.get("start_location");
                   Double latitude = start_location.getDouble("lat");
                   Double longitude = start_location.getDouble("lng");
-                  testArray.add(latitude);
-                  testArray.add(longitude);
+                  String lat=latitude.toString();
+                  String lng=latitude.toString();
+                  testArray.add(latitude.toString());
+                  testArray.add(longitude.toString());
+                  testArray.add("|");
+                  if (x==null){
+                	  x=lat.concat(",").concat(lng).concat("|");
+                  }else{
+                  x = x.concat(lat.concat(",").concat(lng).concat("|"));
+                  }
+                  
               }
 
           }
-          System.out.println(testArray.toString());
-    	  
+          //System.out.println(testArray);
+          x= x.substring(0, x.length() - 1);
+          System.out.println(x);
+          HttpURLConnection elevationConnection = null;
+          
+          StringBuilder eleResult = new StringBuilder();
+          String eleBase_url = "https://maps.googleapis.com/maps/api/elevation/json?";
+          String elekey = "&key=AIzaSyAqlZ9cPy0XZ0oPiW8p9c8t6r_8s2lWtIM";
+          String locations = "&locations="+x;
+          String eleFull_url = eleBase_url+locations+elekey;
+          
+          URL eleUrl = new URL(eleFull_url);
+          //URL url = new URL("https://maps.googleapis.com/maps/api/directions/json?origin=hadley,MA,US&destination=Umass+amherst,MA,US&mode=bicycling&alternatives=true&key=AIzaSyDbJBCyTJBUmRSrlAOfzc4AbdjBqZgoSRU");
+          elevationConnection = (HttpURLConnection) eleUrl.openConnection();
+          elevationConnection.setRequestMethod("GET");
+          
+          BufferedReader ele_rd = new BufferedReader(new InputStreamReader(elevationConnection.getInputStream()));
+          String eleLine;
+          
+          while ((eleLine = ele_rd.readLine()) != null) 
+          {
+          	     
+        	  eleResult.append(eleLine);
+        	  System.out.println(eleLine);  
+          }
+        rd.close();
+    	  //System.out.println(eleResult.toString());
           //JSONObject legs = (JSONObject) event.get("legs");
     	  //JSONObject steps = (JSONObject) legs.get("steps");
     	  //JSONObject instructions = (JSONObject) steps.get("html_instructions");
