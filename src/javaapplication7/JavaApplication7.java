@@ -14,7 +14,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 
@@ -29,9 +31,13 @@ public class JavaApplication7 {
      * @param args the command line arguments
      * @throws JSONException 
      */
+	
     public static void main(String[] args) throws MalformedURLException, IOException, JSONException {
         // TODO code application logic here
+    	String[][] arrays = new String[2000][];
+    	//List<List<String>> listOfLists = Lists.newArrayList();
         HttpURLConnection connection = null;
+        
         StringBuilder result = new StringBuilder();
         String base_url = "https://maps.googleapis.com/maps/api/directions/json?";
         String origin = "origin="+"hadley,MA,US";
@@ -42,6 +48,7 @@ public class JavaApplication7 {
         String full_url = base_url+origin+destination+mode+alternatives+key;
         
         URL url = new URL(full_url);
+        //URL url = new URL("https://maps.googleapis.com/maps/api/directions/json?origin=hadley,MA,US&destination=Umass+amherst,MA,US&mode=bicycling&alternatives=true&key=AIzaSyDbJBCyTJBUmRSrlAOfzc4AbdjBqZgoSRU");
         connection = (HttpURLConnection) url.openConnection();
         connection.setRequestMethod("GET");
         
@@ -64,7 +71,7 @@ public class JavaApplication7 {
       JSONArray resultsArray=jsonObject.getJSONArray("routes");
       System.out.println(resultsArray.length());
       for ( int i=0;i<resultsArray.length();i++){
-         
+    	  List<Double> testArray = new ArrayList<Double>();
     	  JSONObject routeObj=(JSONObject)resultsArray.get(i);
           JSONArray legs = routeObj.getJSONArray("legs");
           
@@ -77,11 +84,12 @@ public class JavaApplication7 {
                   JSONObject start_location = (JSONObject)stepObj.get("start_location");
                   Double latitude = start_location.getDouble("lat");
                   Double longitude = start_location.getDouble("lng");
-                  System.out.println(latitude.toString());
+                  testArray.add(latitude);
+                  testArray.add(longitude);
               }
 
           }
-          
+          System.out.println(testArray.toString());
     	  
           //JSONObject legs = (JSONObject) event.get("legs");
     	  //JSONObject steps = (JSONObject) legs.get("steps");
