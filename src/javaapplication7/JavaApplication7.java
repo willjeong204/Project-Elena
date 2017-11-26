@@ -31,8 +31,12 @@ public class JavaApplication7 {
      * @param args the command line arguments
      * @throws JSONException 
      */
+    public static void main(String[] args)throws MalformedURLException, IOException, JSONException 
+    {
+        getData("hadley,MA,US","Umass amherst,MA,US");
+    }
 	
-    public static void main(String[] args) throws MalformedURLException, IOException, JSONException {
+    public static void getData(String src, String dst) throws MalformedURLException, IOException, JSONException {
         // TODO code application logic here
     	//String[][] arrays = new String[2000][];
     	List<String> testArray = new ArrayList<String>();
@@ -62,14 +66,10 @@ public class JavaApplication7 {
         }
       rd.close();
       
-      //System.out.println(result.toString()); 
-      //int responseCode = connection.getResponseCode();
-      //System.out.println("Response Code : " + responseCode);
+      
       JSONObject jsonObject = new JSONObject(result.toString());
-      //System.out.println(jsonObject.get("routes").toString());      
       
       JSONArray resultsArray=jsonObject.getJSONArray("routes");
-      System.out.println(resultsArray.length());
       String x=null;
       for ( int i=0;i<resultsArray.length();i++){
     	  
@@ -126,12 +126,6 @@ public class JavaApplication7 {
         	  System.out.println(eleLine);  
           }
           ele_rd.close();
-          
-    	  //System.out.println(eleResult.toString());
-          //JSONObject legs = (JSONObject) event.get("legs");
-    	  //JSONObject steps = (JSONObject) legs.get("steps");
-    	  //JSONObject instructions = (JSONObject) steps.get("html_instructions");
-    	  //Double latitude = (Double)northEastObj.get("lat");
           
       }
       
