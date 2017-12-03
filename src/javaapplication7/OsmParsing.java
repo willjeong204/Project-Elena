@@ -19,7 +19,7 @@ import org.xml.sax.SAXException;
  *
  * @author shrut
  */
-public class NewClass {
+public class OsmParsing {
     
     public static void main(String[] args) throws JDOMException, IOException, SAXException, ParserConfigurationException
     {
@@ -60,7 +60,7 @@ public class NewClass {
             
             Node lng = pNode.getNamedItem("lon");
             String longitude = lng.getNodeValue();
-            point.lat = longitude;
+            point.lng = longitude;
             
             Node node_id = pNode.getNamedItem("id");
             String id = node_id.getNodeValue();
