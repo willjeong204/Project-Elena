@@ -6,54 +6,61 @@ package javaapplication7;
 
 import java.io.*;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.*;
-
 import org.jdom2.*;
 import org.jdom2.input.SAXBuilder;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-
-import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
-
-
+import org.w3c.dom.Element;
 /**
  *
  * @author shrut
  */
 public class OsmParsing {
     
-    public static void main(String[] args) throws Exception
+    public static void main(String[] args) throws JDOMException, IOException, SAXException, ParserConfigurationException, Exception
     {
-        parser();
+        ArrayList<NodeObject> mapNodes = parser();
+        makeWays();
+        
     }
     
-    public static void parser() throws Exception
+    public static ArrayList<NodeObject> parser() throws JDOMException, IOException, SAXException, ParserConfigurationException, Exception
     {
     
     ArrayList<NodeObject> mapNodes = new ArrayList<NodeObject>();
-    File inputFile = new File("C:\\Users\\Darshana\\Desktop\\map.osm"); //Replace with your location of map.osm
+    
+    SAXBuilder saxBuilder = new SAXBuilder();
+    File inputFile = new File("C:\\Users\\shrut\\Documents\\SE\\Project\\map.osm"); //Replace with your location of map.osm
+    Document document = saxBuilder.build(inputFile); 
     
     DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
     DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
     org.w3c.dom.Document doc = dBuilder.parse(inputFile);
     doc.getDocumentElement().normalize();
     
+    System.out.println("Root element :" + doc.getDocumentElement().getNodeName());
     NodeList nList = doc.getElementsByTagName("node");
+   
     String locStr=null;
     int count =0;
     ArrayList<String> locList = new ArrayList<String>();
     int n=1;
+   
+    int index=0;
     for (int temp = 0; temp < nList.getLength(); temp++)
     {
         Node nNode = nList.item(temp);
+        //System.out.println(temp+1);
+        //System.out.println("\nCurrent Element :" + nNode.getNodeName());
+        
         if (nNode.getNodeType() == Node.ELEMENT_NODE)
         {
             NodeObject point = new NodeObject();
@@ -70,9 +77,12 @@ public class OsmParsing {
             Node node_id = pNode.getNamedItem("id");
             String id = node_id.getNodeValue();
             point.id = id;
-            mapNodes.add(point);
             
-            if (locStr==null){
+            point.index = index;
+            index+=1;
+            
+            mapNodes.add(point);
+        if (locStr==null){
             	locStr=point.lat.concat(",").concat(point.lng).concat("|");
             }else{
             	locStr = locStr.concat(point.lat.concat(",").concat(point.lng).concat("|"));            
@@ -91,14 +101,16 @@ public class OsmParsing {
             	}
             	n++;
             	locStr=null;
-            }            
         }
+      }
     }
+        return mapNodes;
     }
-
+    
+    
 	private static ArrayList<String> callElevationApi(String x, ArrayList<NodeObject> mapNodes) throws Exception {
 		// TODO Auto-generated method stub
-		HttpURLConnection elevationConnection = null;          
+	    HttpURLConnection elevationConnection = null;          
 	    StringBuilder eleResult = new StringBuilder();
 	    String eleBase_url = "https://maps.googleapis.com/maps/api/elevation/xml?";
 	    String elekey = "&key=AIzaSyAqlZ9cPy0XZ0oPiW8p9c8t6r_8s2lWtIM";
@@ -126,7 +138,7 @@ public class OsmParsing {
         org.w3c.dom.Document doc= builder.parse(is);
         
 	    NodeList locList = doc.getDocumentElement().getElementsByTagName("result");
-	    System.out.println(locList.getLength());    
+	    //System.out.println(locList.getLength());    
 	    
 	    for (int temp = 0; temp < locList.getLength(); temp++)
 	    {
@@ -140,4 +152,48 @@ public class OsmParsing {
 	    }
 	return(eleList);
 }
+    
+    public static void makeWays() throws JDOMException, IOException, SAXException, ParserConfigurationException
+    {
+        SAXBuilder saxBuilder = new SAXBuilder();
+        File inputFile = new File("C:\\Users\\shrut\\Documents\\SE\\Project\\map.osm"); //Replace with your location of map.osm
+        Document document = saxBuilder.build(inputFile); 
+
+        DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+        org.w3c.dom.Document doc = dBuilder.parse(inputFile);
+        doc.getDocumentElement().normalize();
+
+        NodeList nList = doc.getElementsByTagName("way");
+        //System.out.println(nList.getLength());
+        for (int temp = 0; temp < nList.getLength(); temp++)
+        {
+            Node nNode = nList.item(temp);
+            //System.out.println(temp+1);
+            //System.out.println("Current Element :" + nNode.getNodeName());
+        
+            if (nNode.getNodeType() == Node.ELEMENT_NODE)
+            {
+                NodeList children = nNode.getChildNodes();
+                //System.out.println(children.getLength());
+                
+                for(int i = 0; i<children.getLength();i++)
+                {
+                    Node child = children.item(i);
+                    //NamedNodeMap child_attr = child.get
+                    //child_attr.getNamedItem("nd");
+                    if(child.getNodeName().equalsIgnoreCase("nd"))
+                    {
+                        NamedNodeMap x = child.getAttributes();
+                        Node ref = x.getNamedItem("ref");
+                        System.out.println(ref.getNodeValue());
+                    }
+                }
+            }
+        }
+    }
+    
 }
+ 
+
+
