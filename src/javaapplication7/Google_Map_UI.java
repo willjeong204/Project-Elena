@@ -12,9 +12,6 @@ import com.teamdev.jxmaps.MapReadyHandler;
 import com.teamdev.jxmaps.MapStatus;
 import com.teamdev.jxmaps.swing.MapView;
 
-import javax.swing.*;
-import java.awt.*;
-
 public class Google_Map_UI extends MapView {
     public Google_Map_UI(MapViewOptions options) {
         super(options);
@@ -25,7 +22,7 @@ public class Google_Map_UI extends MapView {
                     final Map map = getMap();
                     map.setZoom(5.0);
                     GeocoderRequest request = new GeocoderRequest(map);
-                    request.setAddress("Kharkiv, UA");
+                    request.setAddress("Amherst, MA");
 
                     getServices().getGeocoder().geocode(request, new GeocoderCallback(map) {
                         @Override
@@ -44,20 +41,5 @@ public class Google_Map_UI extends MapView {
                 }
             }
         });
-    }
-
-    public static void main(String[] args) {
-
-        MapViewOptions options = new MapViewOptions();
-        options.importPlaces();
-        final Google_Map_UI mapView = new Google_Map_UI(options);
-
-        JFrame frame = new JFrame("JxMaps - Hello, World!");
-
-        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        frame.add(mapView, BorderLayout.CENTER);
-        frame.setSize(700, 500);
-        frame.setLocationRelativeTo(null);
-        frame.setVisible(true);
     }
 }
