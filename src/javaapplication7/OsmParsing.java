@@ -23,10 +23,11 @@ public class OsmParsing {
     
     public static void main(String[] args) throws JDOMException, IOException, SAXException, ParserConfigurationException
     {
-        parser();
+        ArrayList<NodeObject> mapNodes = parser();
+        
     }
     
-    public static void parser() throws JDOMException, IOException, SAXException, ParserConfigurationException
+    public static ArrayList<NodeObject> parser() throws JDOMException, IOException, SAXException, ParserConfigurationException
     {
     
     ArrayList<NodeObject> mapNodes = new ArrayList<NodeObject>();
@@ -42,7 +43,7 @@ public class OsmParsing {
     
     System.out.println("Root element :" + doc.getDocumentElement().getNodeName());
     NodeList nList = doc.getElementsByTagName("node");
-    
+    int index=0;
     for (int temp = 0; temp < nList.getLength(); temp++)
     {
         Node nNode = nList.item(temp);
@@ -66,10 +67,12 @@ public class OsmParsing {
             String id = node_id.getNodeValue();
             point.id = id;
             
+            point.index = index;
+            index+=1;
+            
             mapNodes.add(point);
         }
     }
-    
+        return mapNodes;
     }
-
 }

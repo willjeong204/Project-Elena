@@ -14,5 +14,7 @@ public class NodeObject {
     String lng;
     String id;
     String elevation;
+    int index;
+    
     
 }
