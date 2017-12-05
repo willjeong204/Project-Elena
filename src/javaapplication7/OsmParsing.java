@@ -175,15 +175,37 @@ public class OsmParsing {
             if (nNode.getNodeType() == Node.ELEMENT_NODE)
             {
                 NodeList children = nNode.getChildNodes();
+                Node last = nNode.getLastChild();
+                last = last.getPreviousSibling();
+                boolean building = false;
+                //System.out.println(last.getNodeName());
+                while(last.getNodeName().equalsIgnoreCase("tag"))
+                {
+                    //System.out.println("processing last");
+                    NamedNodeMap x = last.getAttributes();
+                    Node k = x.getNamedItem("k");
+                    
+                    if (k.getNodeValue().equalsIgnoreCase("building") )
+                    {
+                        //System.out.println("its a building");
+                        building = true;
+                    } 
+                    last = last.getPreviousSibling();
+                }
                 //System.out.println(children.getLength());
-                
+                if(building == true)
+                {
+                    continue;
+                }
                 for(int i = 0; i<children.getLength();i++)
                 {
                     Node child = children.item(i);
                     //NamedNodeMap child_attr = child.get
                     //child_attr.getNamedItem("nd");
+                    
                     if(child.getNodeName().equalsIgnoreCase("nd"))
                     {
+                        
                         NamedNodeMap x = child.getAttributes();
                         Node ref = x.getNamedItem("ref");
                         System.out.println(ref.getNodeValue());
