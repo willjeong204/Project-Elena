@@ -8,6 +8,7 @@ import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.*;
+
 import org.jdom2.*;
 import org.jdom2.input.SAXBuilder;
 import javax.xml.parsers.DocumentBuilder;
@@ -38,7 +39,7 @@ public class OsmParsing {
     ArrayList<NodeObject> mapNodes = new ArrayList<NodeObject>();
     
     SAXBuilder saxBuilder = new SAXBuilder();
-    File inputFile = new File("C:\\Users\\shrut\\Documents\\SE\\Project\\map.osm"); //Replace with your location of map.osm
+    File inputFile = new File("C:\\Users\\Darshana\\Desktop\\map.osm"); //Replace with your location of map.osm
     Document document = saxBuilder.build(inputFile); 
     
     DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
@@ -52,6 +53,8 @@ public class OsmParsing {
     String locStr=null;
     int count =0;
     ArrayList<String> locList = new ArrayList<String>();
+    HashMap<Integer,String> indexIDMap = new HashMap<>();
+    
     int n=1;
    
     int index=0;
@@ -80,6 +83,8 @@ public class OsmParsing {
             
             point.index = index;
             index+=1;
+                        
+            indexIDMap.put(index, id);
             
             mapNodes.add(point);
         if (locStr==null){
@@ -104,7 +109,8 @@ public class OsmParsing {
         }
       }
     }
-        return mapNodes;
+    System.out.println(indexIDMap); 
+    return mapNodes;
     }
     
     
@@ -156,7 +162,7 @@ public class OsmParsing {
     public static void makeWays() throws JDOMException, IOException, SAXException, ParserConfigurationException
     {
         SAXBuilder saxBuilder = new SAXBuilder();
-        File inputFile = new File("C:\\Users\\shrut\\Documents\\SE\\Project\\map.osm"); //Replace with your location of map.osm
+        File inputFile = new File("C:\\Users\\Darshana\\Desktop\\map.osm"); //Replace with your location of map.osm
         Document document = saxBuilder.build(inputFile); 
 
         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
