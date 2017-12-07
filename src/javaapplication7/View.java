@@ -18,8 +18,8 @@ import com.teamdev.jxmaps.MapViewOptions;
 class View extends javax.swing.JFrame implements java.util.Observer {
 
 	//attributes as must be visible within class
-	private JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
-	private JPanel panelmap = new JPanel();
+	public JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
+	 JPanel panelmap = new JPanel();
 	private JPanel panelinput = new JPanel();
 	private JLabel jLabelstart = new JLabel();
 	private JLabel jLabelend = new JLabel();;
@@ -30,13 +30,14 @@ class View extends javax.swing.JFrame implements java.util.Observer {
     private JButton clear = new JButton();
     private JButton go = new JButton();;
     private JButton jButtonaddfav = new JButton();
-	
+    MapViewOptions options = new MapViewOptions();
+    Google_Map_UI mapView;
+    
 	View() {
-		
-		MapViewOptions options = new MapViewOptions();
-        options.importPlaces();
-        final Google_Map_UI mapView = new Google_Map_UI(options);
-        
+		mapView = new Google_Map_UI(options);		
+		options.importPlaces();
+        mapView.startingPoint = "Amherst, MA";
+        mapView.destination = "Hadley, MA";
 		JFrame frame = new JFrame("Elevation Navigation Application");
 		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.setSize(1280, 900);
@@ -44,7 +45,7 @@ class View extends javax.swing.JFrame implements java.util.Observer {
 		//create 2 panels, this is top
         panelmap.setLayout( new BorderLayout() );
 		panelmap.add(mapView);
-		
+	
 		//this is bot
 		GroupLayout panelinputLayout = new GroupLayout(panelinput);
 		panelinput.setLayout(panelinputLayout);
@@ -54,7 +55,7 @@ class View extends javax.swing.JFrame implements java.util.Observer {
 		
 		jLabelstart.setText("Starting Point: ");
 		jLabelend.setText("Ending Point: ");
-		Source.setText("Type in your Destination in here");
+		Source.setText("Type in your Source in here");
 		Source.setActionCommand("SOURCE");
 		Destination.setText("Type in your Destination in here");
 		Destination.setActionCommand("DESTINATION");
@@ -131,7 +132,6 @@ class View extends javax.swing.JFrame implements java.util.Observer {
 	}
 
 	public void addController(ActionListener controller){
-		
 		Source.addActionListener(controller);
 		Destination.addActionListener(controller);
 		jButtonmaxele.addActionListener(controller);
@@ -147,10 +147,11 @@ class View extends javax.swing.JFrame implements java.util.Observer {
 			System.exit(0);
 		} //windowClosing()
 	} //CloseListener
-
-	@Override
+	
+	
+	//@Override
 	public void update(Observable obs, Object obj) {
-
-    	}
+		
+    }
 
 } //View
