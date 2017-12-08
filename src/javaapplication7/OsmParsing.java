@@ -6,6 +6,7 @@ package javaapplication7;
 
 import java.io.*;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.*;
 
@@ -29,9 +30,25 @@ public class OsmParsing {
     public static void main(String[] args) throws JDOMException, IOException, SAXException, ParserConfigurationException, Exception
     {
         ArrayList<NodeObject> mapNodes = parser();
-        makeWays();
+        //makeWays();
+        dummy(mapNodes);
         
+        /*.out.println(mapNodes.get(10).lat+","+mapNodes.get(10).lng);
+        System.out.println(mapNodes.get(11).lat+","+mapNodes.get(11).lng);
+        System.out.println(mapNodes.get(12).lat+","+mapNodes.get(12).lng);
+        System.out.println(mapNodes.get(13).lat+","+mapNodes.get(13).lng);
+        System.out.println(mapNodes.get(14).lat+","+mapNodes.get(14).lng);
+    
+        
+        System.out.println(mapNodes.get(10).elevation);
+        System.out.println(mapNodes.get(11).elevation);
+        System.out.println(mapNodes.get(12).elevation);
+        System.out.println(mapNodes.get(13).elevation);
+        System.out.println(mapNodes.get(14).elevation);
+    
+    */
     }
+    
     
     public static ArrayList<NodeObject> parser() throws JDOMException, IOException, SAXException, ParserConfigurationException, Exception
     {
@@ -39,7 +56,7 @@ public class OsmParsing {
     ArrayList<NodeObject> mapNodes = new ArrayList<NodeObject>();
     
     SAXBuilder saxBuilder = new SAXBuilder();
-    File inputFile = new File("C:\\Users\\Darshana\\Desktop\\map.osm"); //Replace with your location of map.osm
+    File inputFile = new File("C:\\Users\\shrut\\Documents\\SE\\Project\\Project-Elena\\map.osm"); //Replace with your location of map.osm
     Document document = saxBuilder.build(inputFile); 
     
     DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
@@ -109,7 +126,7 @@ public class OsmParsing {
         }
       }
     }
-    System.out.println(indexIDMap); 
+    //System.out.println(indexIDMap); 
     return mapNodes;
     }
     
@@ -162,7 +179,7 @@ public class OsmParsing {
     public static void makeWays() throws JDOMException, IOException, SAXException, ParserConfigurationException
     {
         SAXBuilder saxBuilder = new SAXBuilder();
-        File inputFile = new File("C:\\Users\\Darshana\\Desktop\\map.osm"); //Replace with your location of map.osm
+        File inputFile = new File("C:\\Users\\shrut\\Documents\\SE\\Project\\Project-Elena\\map.osm"); //Replace with your location of map.osm
         Document document = saxBuilder.build(inputFile); 
 
         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
@@ -203,6 +220,7 @@ public class OsmParsing {
                 {
                     continue;
                 }
+                ArrayList<String> references =  new ArrayList<String>();
                 for(int i = 0; i<children.getLength();i++)
                 {
                     Node child = children.item(i);
@@ -214,13 +232,56 @@ public class OsmParsing {
                         
                         NamedNodeMap x = child.getAttributes();
                         Node ref = x.getNamedItem("ref");
-                        System.out.println(ref.getNodeValue());
+                        //System.out.println(ref.getNodeValue());
+                        references.add(ref.getNodeValue());
+                         
                     }
                 }
+                //System.out.println(children.getLength());
+                
             }
         }
     }
-    
+    public static void dummy(ArrayList<NodeObject> X) throws MalformedURLException, IOException
+    {
+        HttpURLConnection connection = null;
+        
+        StringBuilder result = new StringBuilder();
+        String base_url = "https://maps.googleapis.com/maps/api/distancematrix/xml?&origins=";
+        
+        for(int i=0; i<10;i++)
+        {
+            String lat = X.get(i).lat;
+            String lng = X.get(i).lng;
+            base_url = base_url+lat+","+lng+"|";
+            
+        }
+        base_url = base_url.substring(0, base_url.length()-1);
+        base_url = base_url + "&destinations=";
+        for(int i=0; i<10;i++)
+        {
+            String lat = X.get(i).lat;
+            String lng = X.get(i).lng;
+            base_url = base_url+lat+","+lng+"|";            
+        }
+        base_url = base_url.substring(0, base_url.length()-1);
+        base_url = base_url + "&key=AIzaSyBJIhJ1NEia7je40oZbD35sV_6rbqcE9Zc";
+        System.out.println(base_url);
+        URL url = new URL(base_url);
+        connection = (HttpURLConnection) url.openConnection();
+        connection.setRequestMethod("GET");
+        BufferedReader rd = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+        String line;
+        
+        while ((line = rd.readLine()) != null) 
+        {
+        	System.out.println(line);       
+                result.append(line);
+        }
+        rd.close();
+      
+        
+    }
 }
  
 
