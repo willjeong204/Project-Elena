@@ -31,8 +31,13 @@ public class OsmParsing {
     {
         ArrayList<NodeObject> mapNodes = parser();
         //makeWays();
-        dummy(mapNodes);
         
+        route(mapNodes);
+             
+        
+        
+
+        //System.out.println(mapNodes.get(0).id);
         /*.out.println(mapNodes.get(10).lat+","+mapNodes.get(10).lng);
         System.out.println(mapNodes.get(11).lat+","+mapNodes.get(11).lng);
         System.out.println(mapNodes.get(12).lat+","+mapNodes.get(12).lng);
@@ -70,7 +75,7 @@ public class OsmParsing {
     String locStr=null;
     int count =0;
     ArrayList<String> locList = new ArrayList<String>();
-    HashMap<Integer,String> indexIDMap = new HashMap<>();
+    HashMap<String,Integer> indexIDMap = new HashMap<>();
     
     int n=1;
    
@@ -101,7 +106,7 @@ public class OsmParsing {
             point.index = index;
             index+=1;
                         
-            indexIDMap.put(index, id);
+            indexIDMap.put(id, index);
             
             mapNodes.add(point);
         if (locStr==null){
@@ -127,6 +132,8 @@ public class OsmParsing {
       }
     }
     //System.out.println(indexIDMap); 
+    System.out.println(indexIDMap.get("66619669"));
+    System.out.println(indexIDMap.get("66669518"));
     return mapNodes;
     }
     
@@ -228,45 +235,43 @@ public class OsmParsing {
                     //child_attr.getNamedItem("nd");
                     
                     if(child.getNodeName().equalsIgnoreCase("nd"))
-                    {
-                        
+                    {   
                         NamedNodeMap x = child.getAttributes();
                         Node ref = x.getNamedItem("ref");
                         //System.out.println(ref.getNodeValue());
-                        references.add(ref.getNodeValue());
-                         
+                        references.add(ref.getNodeValue());             
                     }
                 }
                 //System.out.println(children.getLength());
-                
             }
         }
     }
-    public static void dummy(ArrayList<NodeObject> X) throws MalformedURLException, IOException
+    public static void getDistances(ArrayList<NodeObject> src, ArrayList<NodeObject> dst) throws MalformedURLException, IOException
     {
         HttpURLConnection connection = null;
         
         StringBuilder result = new StringBuilder();
         String base_url = "https://maps.googleapis.com/maps/api/distancematrix/xml?&origins=";
         
-        for(int i=0; i<10;i++)
+        for(int i=0; i<src.size();i++)
         {
-            String lat = X.get(i).lat;
-            String lng = X.get(i).lng;
-            base_url = base_url+lat+","+lng+"|";
-            
+            String lat = src.get(i).lat;
+            String lng =src.get(i).lng;
+            base_url = base_url+lat+","+lng+"|";          
         }
         base_url = base_url.substring(0, base_url.length()-1);
         base_url = base_url + "&destinations=";
-        for(int i=0; i<10;i++)
+        for(int i=0; i<dst.size();i++)
         {
-            String lat = X.get(i).lat;
-            String lng = X.get(i).lng;
+            String lat = dst.get(i).lat;
+            String lng = dst.get(i).lng;
             base_url = base_url+lat+","+lng+"|";            
         }
+        
         base_url = base_url.substring(0, base_url.length()-1);
-        base_url = base_url + "&key=AIzaSyBJIhJ1NEia7je40oZbD35sV_6rbqcE9Zc";
-        System.out.println(base_url);
+        base_url = base_url + "&key=AIzaSyCjxAN34ydTukHItnOub9EVa5kwuGb9zBI";
+        //System.out.println(base_url);
+        
         URL url = new URL(base_url);
         connection = (HttpURLConnection) url.openConnection();
         connection.setRequestMethod("GET");
@@ -278,11 +283,99 @@ public class OsmParsing {
         	System.out.println(line);       
                 result.append(line);
         }
-        rd.close();
-      
+        rd.close(); 
+        
+        int src_len = src.size();
+        int dst_len = dst.size();
+        
+        float dis_mat[][] =  new float[src_len][dst_len];
+        //parse file to get distance. 
+        
+        
         
     }
+
+    public static void route(ArrayList<NodeObject> mapNodes) throws MalformedURLException, IOException
+    {
+        ArrayList<NodeObject> src = new ArrayList<NodeObject>();
+        
+        src.add(mapNodes.get(0));
+        //ArrayList<NodeObject> adj = new ArrayList<NodeObject>();
+        //adj.add(mapNodes.get(80));
+        //adj.add(mapNodes.get(186));
+                
+        //getDistances(src, adj);
+        
+        ArrayList<NodeObject> dst = new ArrayList<NodeObject>();
+        dst.add(mapNodes.get(5));
+        
+        //getDistances(adj,dst);
+        
+        class Node
+                {
+            NodeObject o;
+            float cost;
+            
+            Node(NodeObject x, float y)
+            {
+                o=x;
+                cost = y;
+            }
+            Node()
+            {
+                ;
+            }
+        }
+        ArrayList<Node> open = new ArrayList<Node>();
+        ArrayList<Node> closed =  new ArrayList<Node>();
+        
+        Node src_node = new Node(src.get(0),0.0f);
+        
+        
+        while(true)
+        {
+            Node current = new Node();
+            current = open.get(0);
+            for(int i=1; i<open.size();i++)
+            {
+                if(open.get(i).cost<current.cost)
+                    current = open.get(i);
+            }
+            
+            open.remove(current);
+            closed.add(current);
+            
+            if(current.equals(dst))
+                return;
+            
+            ArrayList<NodeObject> adj = new ArrayList<NodeObject>();
+            adj.add(mapNodes.get(80)); // adjacent of current node
+            adj.add(mapNodes.get(186)); //adjacent of current node
+
+            getDistances(src, adj);
+            //src_distance
+        
+            getDistances(adj,dst);
+            //dst_distance
+            
+            for(int i=0;i<adj.size();i++)
+            {
+                Node neighbour = new Node(adj.get(i),2.3f);
+                
+                if(closed.contains(neighbour))
+                    continue;
+                if(open.contains(adj.get(i)))
+                    ;
+            }
+        }
+        
+        
+        
+    }
+
+
 }
+
  
 
 
