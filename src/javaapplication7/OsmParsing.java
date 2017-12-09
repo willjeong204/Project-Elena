@@ -21,12 +21,16 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.w3c.dom.Element;
+
+import com.opencsv.CSVReader;
+
+
 /**
  *
  * @author shrut
  */
 public class OsmParsing {
-    
+	static HashMap<String,Integer> indexIDMap = new HashMap<>();
     public static void main(String[] args) throws JDOMException, IOException, SAXException, ParserConfigurationException, Exception
     {
         ArrayList<NodeObject> mapNodes = parser();
@@ -61,7 +65,7 @@ public class OsmParsing {
     ArrayList<NodeObject> mapNodes = new ArrayList<NodeObject>();
     
     SAXBuilder saxBuilder = new SAXBuilder();
-    File inputFile = new File("C:\\Users\\shrut\\Documents\\SE\\Project\\Project-Elena\\map.osm"); //Replace with your location of map.osm
+    File inputFile = new File("C:\\Users\\Darshana\\Desktop\\map.osm"); //Replace with your location of map.osm
     Document document = saxBuilder.build(inputFile); 
     
     DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
@@ -75,7 +79,7 @@ public class OsmParsing {
     String locStr=null;
     int count =0;
     ArrayList<String> locList = new ArrayList<String>();
-    HashMap<String,Integer> indexIDMap = new HashMap<>();
+    
     
     int n=1;
    
@@ -186,7 +190,7 @@ public class OsmParsing {
     public static void makeWays() throws JDOMException, IOException, SAXException, ParserConfigurationException
     {
         SAXBuilder saxBuilder = new SAXBuilder();
-        File inputFile = new File("C:\\Users\\shrut\\Documents\\SE\\Project\\Project-Elena\\map.osm"); //Replace with your location of map.osm
+        File inputFile = new File("C:\\Users\\Darshana\\Desktop\\map.osm"); //Replace with your location of map.osm
         Document document = saxBuilder.build(inputFile); 
 
         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
@@ -246,8 +250,9 @@ public class OsmParsing {
             }
         }
     }
-    public static void getDistances(ArrayList<NodeObject> src, ArrayList<NodeObject> dst) throws MalformedURLException, IOException
+    public static float[][] getDistances(ArrayList<NodeObject> src, ArrayList<NodeObject> dst) throws MalformedURLException, IOException, JDOMException, ParserConfigurationException, SAXException
     {
+    	/*
         HttpURLConnection connection = null;
         
         StringBuilder result = new StringBuilder();
@@ -284,18 +289,64 @@ public class OsmParsing {
                 result.append(line);
         }
         rd.close(); 
-        
-        int src_len = src.size();
-        int dst_len = dst.size();
+        */
+        int src_len =1;// src.size();
+        int dst_len = 2;//dst.size();
         
         float dis_mat[][] =  new float[src_len][dst_len];
         //parse file to get distance. 
         
+        SAXBuilder saxBuilder = new SAXBuilder();
+        File inputFile = new File("C:\\Users\\Darshana\\Desktop\\test.xml"); //Replace with your location of map.osm
+        Document document = saxBuilder.build(inputFile); 
         
+        DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+        org.w3c.dom.Document doc = dBuilder.parse(inputFile);
+        doc.getDocumentElement().normalize();
         
+        System.out.println("Root element :" + doc.getDocumentElement().getNodeName());
+        NodeList rowList = doc.getElementsByTagName("row");
+        ArrayList<Float> distances = new ArrayList<Float>();
+        for (int temp = 0; temp < rowList.getLength(); temp++)
+	    {
+	    	Node nNode = rowList.item(temp);
+	    	if (nNode.getNodeType() == Node.ELEMENT_NODE)
+	        {
+	        Element ele = (Element)nNode;
+	        NodeList element = ele.getElementsByTagName("element");
+	        
+	        for (int k = 0; k < element.getLength(); k++)
+		    {
+	        	Node eleNode = element.item(k).getLastChild();
+	        	eleNode = eleNode.getPreviousSibling();
+	        	System.out.println("eleNode...."+eleNode.getNodeName());
+	        	String distance =eleNode.getFirstChild().getNextSibling().getTextContent();
+	        	//System.out.println(distance);
+	        	distances.add(Float.parseFloat(distance));
+		    }
+		    }
+	        //element.item(0).getChildNodes();
+	        //System.out.println("elevation..."+elevation);
+	        //eleList.add(elevation);	        
+	        
+	    }
+        int distances_index =0;
+        for(int row=0;row<src_len;row++)
+        {
+        	for(int col = 0; col<dst_len;col++)
+        		{
+        		dis_mat[row][col]=distances.get(distances_index);
+        		distances_index+=1;
+        		System.out.println("dis_mat[row][col]"+dis_mat[row][col]);
+        		System.out.println("row"+row+"coulmn"+col);
+        		}
+        	
+        }
+        return dis_mat;
     }
 
-    public static void route(ArrayList<NodeObject> mapNodes) throws MalformedURLException, IOException
+    public static void route(ArrayList<NodeObject> mapNodes) throws MalformedURLException, IOException, JDOMException, ParserConfigurationException, SAXException
     {
         ArrayList<NodeObject> src = new ArrayList<NodeObject>();
         
@@ -305,6 +356,8 @@ public class OsmParsing {
         //adj.add(mapNodes.get(186));
                 
         //getDistances(src, adj);
+        
+       
         
         ArrayList<NodeObject> dst = new ArrayList<NodeObject>();
         dst.add(mapNodes.get(5));
@@ -329,8 +382,10 @@ public class OsmParsing {
         ArrayList<Node> open = new ArrayList<Node>();
         ArrayList<Node> closed =  new ArrayList<Node>();
         
-        Node src_node = new Node(src.get(0),0.0f);
+        Node src_node;
+        src_node = new Node(src.get(0),0.0f);
         
+        open.add(src_node);
         
         while(true)
         {
@@ -348,16 +403,26 @@ public class OsmParsing {
             if(current.equals(dst))
                 return;
             
+            ArrayList<String> sourceAdjList = new ArrayList<String>();
             ArrayList<NodeObject> adj = new ArrayList<NodeObject>();
-            adj.add(mapNodes.get(80)); // adjacent of current node
-            adj.add(mapNodes.get(186)); //adjacent of current node
-
+            sourceAdjList = readCSV(src);
+            for(int m=0;m<sourceAdjList.size();m++){
+            	System.out.println("hi" + sourceAdjList.get(m));
+            	int index = indexIDMap.get(sourceAdjList.get(m));
+            	adj.add(mapNodes.get(index));
+            }
+            
+            
+            
+            
+            
+            //return;
             getDistances(src, adj);
             //src_distance
         
             getDistances(adj,dst);
             //dst_distance
-            
+            /*
             for(int i=0;i<adj.size();i++)
             {
                 Node neighbour = new Node(adj.get(i),2.3f);
@@ -366,13 +431,59 @@ public class OsmParsing {
                     continue;
                 if(open.contains(adj.get(i)))
                     ;
-            }
+            }*/
         }
-        
+        //return;
         
         
     }
 
+
+	private static ArrayList<String> readCSV(ArrayList<NodeObject> src) {
+		// TODO Auto-generated method stub
+		CSVReader csvReader = null;
+		HashMap<String,ArrayList<String>> adjMatrix = new HashMap<>();
+        try
+        {        	
+            csvReader = new CSVReader(new FileReader("C:\\Users\\Darshana\\Desktop\\adjacency.csv"),',','"');
+            String[] adjList = null;
+            while((adjList = csvReader.readNext())!=null)
+            {
+            	ArrayList<String> lines = new ArrayList<String>();
+            	for(int i =1;i<adjList.length;i++){
+            		lines.add(adjList[i]);
+            	}
+            	adjMatrix.put(adjList[0], lines);
+            	
+            }
+            System.out.println(adjMatrix.size());
+        }
+        catch(Exception ee)
+        {
+            ee.printStackTrace();
+        }
+        finally
+        {
+		try
+		{
+			csvReader.close();
+		}
+		catch(Exception ee)
+		{
+			ee.printStackTrace();
+		}
+	}
+	NodeObject source = src.get(0);
+	String nodeID =source.id;
+	System.out.println("nodeID:   "+nodeID);	
+	if(adjMatrix.containsKey(nodeID)){
+		System.out.println("here");
+	return adjMatrix.get(nodeID);
+	}else{
+		System.out.println("absent");
+		return null;
+	}
+	}
 
 }
 
