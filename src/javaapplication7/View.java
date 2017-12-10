@@ -30,12 +30,11 @@ class View extends javax.swing.JFrame implements java.util.Observer {
     private JButton clear = new JButton();
     private JButton go = new JButton();;
     private JButton jButtonaddfav = new JButton();
+    private Google_Map_UI mapView;
 	
 	View() {
 		
-		MapViewOptions options = new MapViewOptions();
-        options.importPlaces();
-        final Google_Map_UI mapView = new Google_Map_UI(options);
+        mapView = new Google_Map_UI();
         
 		JFrame frame = new JFrame("Elevation Navigation Application");
 		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -48,6 +47,18 @@ class View extends javax.swing.JFrame implements java.util.Observer {
 		//this is bot
 		GroupLayout panelinputLayout = new GroupLayout(panelinput);
 		panelinput.setLayout(panelinputLayout);
+		
+		splitPane.setOneTouchExpandable(true);
+		splitPane.setDividerLocation(550);
+		splitPane.setTopComponent(panelmap);
+		splitPane.setBottomComponent(panelinput);
+	
+		Dimension minimumSize = new Dimension(100, 50);
+		panelmap.setMinimumSize(minimumSize);
+		panelinput.setMinimumSize(minimumSize);
+	
+		frame.add(splitPane);
+		frame.setVisible(true);
 		
 		panelinputLayout.setAutoCreateGaps(true);
 		panelinputLayout.setAutoCreateContainerGaps(true);
@@ -117,17 +128,6 @@ class View extends javax.swing.JFrame implements java.util.Observer {
             )
         );
 		
-		splitPane.setOneTouchExpandable(true);
-		splitPane.setDividerLocation(550);
-		splitPane.setTopComponent(panelmap);
-		splitPane.setBottomComponent(panelinput);
-	
-		Dimension minimumSize = new Dimension(100, 50);
-		panelmap.setMinimumSize(minimumSize);
-		panelinput.setMinimumSize(minimumSize);
-	
-		frame.add(splitPane);
-		frame.setVisible(true);
 	}
 
 	public void addController(ActionListener controller){

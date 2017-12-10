@@ -42,7 +42,7 @@ public class Google_Map_UI extends MapView {
 	            // Setting map options
 	            map.setOptions(options);
 	
-//	            performGeocode(INITIAL_LOCATION,"Boston");
+	            performGeocode(INITIAL_LOCATION,"Boston");
 	        }
     		});
     }
