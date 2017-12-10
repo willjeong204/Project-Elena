@@ -38,7 +38,10 @@ public class OsmParsing {
         ArrayList<NodeObject> mapNodes = parser();
         //makeWays();
 
-        System.out.println(mapNodes.get(0).id);
+        System.out.println(mapNodes.get(0).lat + mapNodes.get(0).lng);
+        System.out.println(mapNodes.get(718).lat + mapNodes.get(718).lng);
+        
+        
         System.out.println(indexIDMap.get("66590928"));
         
         boolean result = route(mapNodes);
@@ -49,8 +52,6 @@ public class OsmParsing {
             System.out.println("false");
              
         
-        
-
         //System.out.println(mapNodes.get(0).id);
         /*.out.println(mapNodes.get(10).lat+","+mapNodes.get(10).lng);
         System.out.println(mapNodes.get(11).lat+","+mapNodes.get(11).lng);
@@ -197,69 +198,6 @@ public class OsmParsing {
 	return(eleList);
 }
     
-    public static void makeWays() throws JDOMException, IOException, SAXException, ParserConfigurationException
-    {
-        SAXBuilder saxBuilder = new SAXBuilder();
-        File inputFile = new File("C:\\Users\\shrut\\Documents\\SE\\Project\\Project-Elena\\map.osm"); //Replace with your location of map.osm
-        Document document = saxBuilder.build(inputFile); 
-
-        DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-        org.w3c.dom.Document doc = dBuilder.parse(inputFile);
-        doc.getDocumentElement().normalize();
-
-        NodeList nList = doc.getElementsByTagName("way");
-        //System.out.println(nList.getLength());
-        for (int temp = 0; temp < nList.getLength(); temp++)
-        {
-            Node nNode = nList.item(temp);
-            //System.out.println(temp+1);
-            //System.out.println("Current Element :" + nNode.getNodeName());
-        
-            if (nNode.getNodeType() == Node.ELEMENT_NODE)
-            {
-                NodeList children = nNode.getChildNodes();
-                Node last = nNode.getLastChild();
-                last = last.getPreviousSibling();
-                boolean building = false;
-                //System.out.println(last.getNodeName());
-                while(last.getNodeName().equalsIgnoreCase("tag"))
-                {
-                    //System.out.println("processing last");
-                    NamedNodeMap x = last.getAttributes();
-                    Node k = x.getNamedItem("k");
-                    
-                    if (k.getNodeValue().equalsIgnoreCase("building") )
-                    {
-                        //System.out.println("its a building");
-                        building = true;
-                    } 
-                    last = last.getPreviousSibling();
-                }
-                //System.out.println(children.getLength());
-                if(building == true)
-                {
-                    continue;
-                }
-                ArrayList<String> references =  new ArrayList<String>();
-                for(int i = 0; i<children.getLength();i++)
-                {
-                    Node child = children.item(i);
-                    //NamedNodeMap child_attr = child.get
-                    //child_attr.getNamedItem("nd");
-                    
-                    if(child.getNodeName().equalsIgnoreCase("nd"))
-                    {   
-                        NamedNodeMap x = child.getAttributes();
-                        Node ref = x.getNamedItem("ref");
-                        //System.out.println(ref.getNodeValue());
-                        references.add(ref.getNodeValue());             
-                    }
-                }
-                //System.out.println(children.getLength());
-            }
-        }
-    }
     public static float[][] getDistances(ArrayList<NodeObject> src, ArrayList<NodeObject> dst) throws MalformedURLException, IOException, JDOMException, ParserConfigurationException, SAXException
     {
         
@@ -370,12 +308,13 @@ public class OsmParsing {
         src.add(mapNodes.get(0));
         
         ArrayList<NodeObject> dst = new ArrayList<NodeObject>();
-        dst.add(mapNodes.get(292));
+        dst.add(mapNodes.get(718));
         
         class Node
                 {
             NodeObject o;
             float cost;
+            Node parent;
             
             Node(NodeObject x, float y)
             {
@@ -392,8 +331,9 @@ public class OsmParsing {
         
         Node src_node;
         src_node = new Node(src.get(0),0.0f);
-        
+        src_node.parent = null;
         open.add(src_node);
+        
         while(true)
         {
             Node current;
@@ -409,7 +349,17 @@ public class OsmParsing {
             
                 
             if(current.o.id.equals(dst.get(0).id))
+            {
+                while(current.parent!=null)
+                {
+                    //System.out.print(current.o.id+"("+current.o.lat+","+current.o.lng+")"+"<-");
+                    System.out.println("("+current.o.lat+","+current.o.lng+")");
+                    current = current.parent;
+                }
+                //System.out.print(current.o.id+"("+current.o.lat+","+current.o.lng+")");
+                System.out.println("("+current.o.lat+","+current.o.lng+")");
                 return true;
+            }
             //if(open.isEmpty())
                 //break;
             System.out.println("current node: "+current.o.id);
@@ -452,6 +402,7 @@ public class OsmParsing {
                                if(open.get(j).cost<neighbour.cost)
                                {
                                    open.get(j).cost = neighbour.cost;
+                                   open.get(j).parent = current;
                                }
                                break;
                            }
@@ -459,7 +410,9 @@ public class OsmParsing {
                 
                 if(!found)
                 {
+                    neighbour.parent = current;
                     open.add(neighbour);
+                    
                 }
                 
                 if(open.isEmpty())
@@ -516,7 +469,4 @@ public class OsmParsing {
 	}
 
 }
-
- 
-
 
