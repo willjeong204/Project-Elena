@@ -41,11 +41,11 @@ public class Controller implements java.awt.event.ActionListener{
 				model.setDestination(view.Destination.getText());
 	            JavaApplication7.getData(model.getSource(), model.getDestination());
 	        } catch (MalformedURLException ex) {
-	            Logger.getLogger(NewJFrame1.class.getName()).log(Level.SEVERE, null, ex);
+	            Logger.getLogger(View.class.getName()).log(Level.SEVERE, null, ex);
 	        } catch (IOException ex) {
-	            Logger.getLogger(NewJFrame1.class.getName()).log(Level.SEVERE, null, ex);
+	            Logger.getLogger(View.class.getName()).log(Level.SEVERE, null, ex);
 	        } catch (JSONException ex) {
-	            Logger.getLogger(NewJFrame1.class.getName()).log(Level.SEVERE, null, ex);
+	            Logger.getLogger(View.class.getName()).log(Level.SEVERE, null, ex);
 	        }
 			break;
 		case "ADDFAV":
