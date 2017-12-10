@@ -222,7 +222,7 @@ public class OsmParsing {
         }
         
         base_url = base_url.substring(0, base_url.length()-1);
-        base_url = base_url + "&key=AIzaSyCjxAN34ydTukHItnOub9EVa5kwuGb9zBI";
+        base_url = base_url + "&key=AIzaSyBJIhJ1NEia7je40oZbD35sV_6rbqcE9Zc";
         //System.out.println(base_url);
         
         URL url = new URL(base_url);
@@ -298,6 +298,7 @@ public class OsmParsing {
         		}
         	
         }
+        
         return dis_mat;
     }
 
@@ -383,12 +384,15 @@ public class OsmParsing {
             src_distance = getDistances(cur_list, adj);
             //src_distance
         
-            //float dst_distance[][];
-            //dst_distance = getDistances(adj,dst);
+            float dst_distance[][];
+            dst_distance = getDistances(adj,dst);
             
             for(int i=0;i<adj.size();i++)
             {
-                Node neighbour = new Node(adj.get(i),src_distance[0][i]);
+                float score = 0.0f;
+                score = src_distance[0][i]+dst_distance[i][0]+Float.parseFloat(adj.get(i).elevation);
+                
+                Node neighbour = new Node(adj.get(i),score);
                 System.out.println("Neighbour of " + current.o.id + " is " + neighbour.o.id);
                 if(closed.contains(neighbour.o))
                     continue;
