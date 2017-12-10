@@ -1,25 +1,31 @@
 package javaapplication7;
 
 import com.teamdev.jxmaps.ControlPosition;
+import com.teamdev.jxmaps.ElevationCallback;
+import com.teamdev.jxmaps.ElevationResult;
+import com.teamdev.jxmaps.ElevationService;
+import com.teamdev.jxmaps.ElevationStatus;
 import com.teamdev.jxmaps.GeocoderCallback;
 import com.teamdev.jxmaps.GeocoderRequest;
 import com.teamdev.jxmaps.GeocoderResult;
 import com.teamdev.jxmaps.GeocoderStatus;
 import com.teamdev.jxmaps.InfoWindow;
 import com.teamdev.jxmaps.LatLng;
+import com.teamdev.jxmaps.LocationElevationRequest;
 import com.teamdev.jxmaps.Map;
 import com.teamdev.jxmaps.MapMouseEvent;
 import com.teamdev.jxmaps.MapOptions;
 import com.teamdev.jxmaps.MapReadyHandler;
 import com.teamdev.jxmaps.MapStatus;
 import com.teamdev.jxmaps.MapTypeControlOptions;
+import com.teamdev.jxmaps.MapTypeId;
 import com.teamdev.jxmaps.Marker;
 import com.teamdev.jxmaps.MouseEvent;
 import com.teamdev.jxmaps.swing.MapView;
 
 @SuppressWarnings("serial")
 public class Google_Map_UI extends MapView {
-
+	InfoWindow infoWindow;
     public Google_Map_UI() {
     		// Setting of a ready handler to MapView object. onMapReady will be called when map initialization is done and
     		// the map object is ready to use. Current implementation of onMapReady customizes the map object.
@@ -28,8 +34,11 @@ public class Google_Map_UI extends MapView {
     			public void onMapReady(MapStatus status) {
 	            // Getting the associated map object
 	            final Map map = getMap();
+	            map.setCenter(new LatLng(42.340382, -72.496819));
 	            // Setting initial zoom value
-	            map.setZoom(10.0);
+	            map.setZoom(7.0);
+	            // Setting initial map type
+                map.setMapTypeId(MapTypeId.HYBRID);
 	            // Creating a map options object
 	            MapOptions options = new MapOptions();
 	            // Creating a map type control options object
@@ -40,12 +49,59 @@ public class Google_Map_UI extends MapView {
 	            options.setMapTypeControlOptions(controlOptions);
 	            // Setting map options
 	            map.setOptions(options);
-	            map.setCenter(new LatLng(42.340382, -72.496819));
-	
+	            
+	            showElevationInfo(map, map.getCenter(), true);
+	            // Adding of event listener to the click event
+                map.addEventListener("click", new MapMouseEvent() {
+                    @Override
+                    public void onEvent(final MouseEvent mouseEvent) {
+                        showElevationInfo(map, mouseEvent.latLng(), false);
+                    }
+                });
 //	            performGeocode("Amherst","Boston");
 	        }
     		});
     }
+    
+    
+    private void showElevationInfo(final Map map, final LatLng latLng, final boolean initial) {
+        // Getting the elevation service instance
+        final ElevationService elevationService = getServices().getElevationService();
+
+        // Checking if info window has already opened
+        if (infoWindow != null) {
+            // Close info window
+            infoWindow.close();
+        }
+
+        // Creating an elevation request
+        LocationElevationRequest request = new LocationElevationRequest();
+        LatLng[] locations = {latLng};
+        // Setting location to the elevation request
+        request.setLocations(locations);
+
+        // Evaluating of the elevation for a location
+        elevationService.getElevationForLocations(request, new ElevationCallback(map) {
+            @Override
+            public void onComplete(ElevationResult[] result, ElevationStatus status) {
+                // Checking operation status
+                if (status == ElevationStatus.OK) {
+                    // Creating an info window
+                    infoWindow = new InfoWindow(map);
+                    String content = "The elevation at this point is <b>" + (int) result[0].getElevation() + "</b> meters. ";
+                    if (initial)
+                        content += "<br><br>Click anywhere on the map to get the elevation data at that point.";
+                    // Setting content of the info window
+                    infoWindow.setContent(content);
+                    // Moving the info window to the source location
+                    infoWindow.setPosition(latLng);
+                    // Showing the info window
+                    infoWindow.open(map);
+                }
+            }
+        });
+    }
+    
     public void performGeocode(String src, String dest) {
         // Getting the associated map object
         final Map map = getMap();

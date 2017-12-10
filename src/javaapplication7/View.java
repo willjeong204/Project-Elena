@@ -49,11 +49,11 @@ class View extends javax.swing.JFrame implements java.util.Observer {
 		panelinput.setLayout(panelinputLayout);
 		
 		splitPane.setOneTouchExpandable(true);
-		splitPane.setDividerLocation(550);
+		splitPane.setDividerLocation(750);
 		splitPane.setTopComponent(panelmap);
 		splitPane.setBottomComponent(panelinput);
 	
-		Dimension minimumSize = new Dimension(100, 50);
+		Dimension minimumSize = new Dimension(100, 100);
 		panelmap.setMinimumSize(minimumSize);
 		panelinput.setMinimumSize(minimumSize);
 	
@@ -80,53 +80,39 @@ class View extends javax.swing.JFrame implements java.util.Observer {
 		jButtonaddfav.setText("Add to my Fav");
 		jButtonaddfav.setActionCommand("ADDFAV");
 		
-		panelinputLayout.setHorizontalGroup(
-	        panelinputLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-	        .addGroup(panelinputLayout.createSequentialGroup()
-	            .addGroup(panelinputLayout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
-	                .addGroup(panelinputLayout.createSequentialGroup()
-	                    .addComponent(jButtonminele, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-	                    .addComponent(jButtonmaxele, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-	                .addGroup(panelinputLayout.createParallelGroup(GroupLayout.Alignment.TRAILING)
-	                    .addGroup(panelinputLayout.createSequentialGroup()
-	                        .addGroup(panelinputLayout.createParallelGroup(GroupLayout.Alignment.TRAILING, false)
-	                            .addComponent(jLabelend, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-	                            .addComponent(jLabelstart))
-	                        .addGroup(panelinputLayout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
-	                            .addComponent(Destination)
-	                            .addComponent(Source, GroupLayout.PREFERRED_SIZE, 200, GroupLayout.PREFERRED_SIZE)))
-	                    .addGroup(panelinputLayout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
-	                        .addComponent(jButtonaddfav, GroupLayout.Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-	                        .addGroup(panelinputLayout.createSequentialGroup()
-	                            .addComponent(clear)
-	                            .addComponent(go))
-	                     )
-	                 )
-	            )
-	        )
+		panelinputLayout.setHorizontalGroup(panelinputLayout.createSequentialGroup()
+			.addGroup(panelinputLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+				.addComponent(jLabelstart)
+				.addComponent(jLabelend))
+		    .addGroup(panelinputLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+		    		.addComponent(jButtonminele)
+		    		.addComponent(Source, GroupLayout.PREFERRED_SIZE, 200, GroupLayout.PREFERRED_SIZE)
+		    		.addComponent(Destination, GroupLayout.PREFERRED_SIZE, 200, GroupLayout.PREFERRED_SIZE))
+		    .addGroup(panelinputLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+		    		.addComponent(jButtonmaxele)
+		    		.addGroup(panelinputLayout.createSequentialGroup()
+		    			.addComponent(clear)
+		    			.addComponent(go))
+		    		.addComponent(jButtonaddfav)
+		    )
 		);
-        panelinputLayout.setVerticalGroup(
-            panelinputLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGroup(panelinputLayout.createSequentialGroup()
-                .addGroup(panelinputLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                    .addGroup(panelinputLayout.createSequentialGroup()
-                        .addGroup(panelinputLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                            .addComponent(jButtonminele)
-                            .addComponent(jButtonmaxele))
-                        .addGroup(panelinputLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabelstart)
-                            .addComponent(Source, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-                        .addGroup(panelinputLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabelend)
-                            .addComponent(Destination, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-                        .addGroup(panelinputLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                            .addComponent(go)
-                            .addComponent(clear))
-                        .addComponent(jButtonaddfav)
-                    )
-               )
-            )
-        );
+				
+		panelinputLayout.setVerticalGroup(panelinputLayout.createSequentialGroup()
+		    .addGroup(panelinputLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+		    		.addComponent(jButtonmaxele)
+				.addComponent(jButtonminele))
+		    .addGroup(panelinputLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+		    		.addComponent(jLabelstart)
+		    		.addComponent(Source, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+		    		.addComponent(clear)
+	    			.addComponent(go))
+		    .addGroup(panelinputLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+		    		.addComponent(jLabelend)
+		    		.addComponent(Destination, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+		    		.addComponent(jButtonaddfav)
+		    	)
+		);
+		
 	}
 
 	public void addController(ActionListener controller){
@@ -164,11 +150,6 @@ class View extends javax.swing.JFrame implements java.util.Observer {
 			System.exit(0);
 		} //windowClosing()
 	} //CloseListener
-
-	@Override
-	public void update(Observable obs, Object obj) {
-
-    	}
 	
 	public Google_Map_UI getMapView() {
 		return mapView;
@@ -183,6 +164,12 @@ class View extends javax.swing.JFrame implements java.util.Observer {
 	public void clear() {
 		Source.setText("");
 		Destination.setText("");
+	}
+
+	@Override
+	public void update(Observable o, Object arg) {
+		// TODO Auto-generated method stub
+		
 	}
 
 } //View

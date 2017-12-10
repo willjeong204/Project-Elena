@@ -21,7 +21,7 @@ public class Controller implements java.awt.event.ActionListener{
 			model.setDestination("");
 			view.clear();
 			//need to figure out how to clear the map.
-			view.getMapView().getMap().dispose();
+//			view.getMapView().getMap().dispose();
 			break;
 		case "GO":
 			//clear the map first then add more.	
