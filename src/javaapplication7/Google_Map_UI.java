@@ -13,6 +13,8 @@ import com.teamdev.jxmaps.MapStatus;
 import com.teamdev.jxmaps.swing.MapView;
 
 public class Google_Map_UI extends MapView {
+	public String startingPoint;
+	public String destination;
     public Google_Map_UI(MapViewOptions options) {
         super(options);
         setOnMapReadyHandler(new MapReadyHandler() {
@@ -20,24 +22,44 @@ public class Google_Map_UI extends MapView {
             public void onMapReady(MapStatus status) {
                 if (status == MapStatus.MAP_STATUS_OK) {
                     final Map map = getMap();
-                    map.setZoom(5.0);
+                    map.setZoom(10.0);
                     GeocoderRequest request = new GeocoderRequest(map);
-                    request.setAddress("Amherst, MA");
-
+                    GeocoderRequest request1 = new GeocoderRequest(map);
+                    
+                    request.setAddress(startingPoint);
+                    request1.setAddress(destination);
+                    
+                    
                     getServices().getGeocoder().geocode(request, new GeocoderCallback(map) {
                         @Override
                         public void onComplete(GeocoderResult[] result, GeocoderStatus status) {
                             if (status == GeocoderStatus.OK) {
-                                map.setCenter(result[0].getGeometry().getLocation());
+                                map.setCenter(result[0].getGeometry().getLocation());             
                                 Marker marker = new Marker(map);
                                 marker.setPosition(result[0].getGeometry().getLocation());
-
+                                
                                 final InfoWindow window = new InfoWindow(map);
-                                window.setContent("Hello, World!");
+                                window.setContent(startingPoint);
                                 window.open(map, marker);
                             }
                         }
                     });
+                    
+                    getServices().getGeocoder().geocode(request1, new GeocoderCallback(map) {
+                        @Override
+                        public void onComplete(GeocoderResult[] result, GeocoderStatus status) {
+                            if (status == GeocoderStatus.OK) {
+                                map.setCenter(result[0].getGeometry().getLocation());
+                                Marker marker = new Marker(map);                
+                                marker.setPosition(result[0].getGeometry().getLocation());                      
+                                
+                                final InfoWindow window = new InfoWindow(map);
+                                window.setContent(destination);
+                                window.open(map, marker);
+                            }
+                        }
+                    });
+                    
                 }
             }
         });

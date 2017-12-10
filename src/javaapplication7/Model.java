@@ -25,4 +25,8 @@ public class Model extends java.util.Observable {
 	public String getDestination() {
 		return destination;
 	}
+	
+	public void updateView(){
+		
+	}
 }

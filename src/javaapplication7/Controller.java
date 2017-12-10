@@ -5,6 +5,8 @@ import java.net.MalformedURLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.swing.JPanel;
+
 import org.json.JSONException;
 
 public class Controller implements java.awt.event.ActionListener{
@@ -39,6 +41,13 @@ public class Controller implements java.awt.event.ActionListener{
 	            // TODO add your handling code here:
 				model.setSource(view.Source.getText());
 				model.setDestination(view.Destination.getText());
+				//view.panelmap.remove(view.mapView);
+				Google_Map_UI newMap = new Google_Map_UI(view.options);
+				newMap.destination = model.getDestination();
+				newMap.startingPoint = model.getSource();
+				view.panelmap.remove(0);
+				view.panelmap.add(newMap);
+				
 	            JavaApplication7.getData(model.getSource(), model.getDestination());
 	        } catch (MalformedURLException ex) {
 	            Logger.getLogger(View.class.getName()).log(Level.SEVERE, null, ex);
