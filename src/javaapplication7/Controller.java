@@ -1,12 +1,5 @@
 package javaapplication7;
 
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-import org.json.JSONException;
-
 public class Controller implements java.awt.event.ActionListener{
 	Model model;
 	View view;
@@ -17,11 +10,6 @@ public class Controller implements java.awt.event.ActionListener{
 	public void actionPerformed(java.awt.event.ActionEvent e){
 		String action = e.getActionCommand();
 		switch (action) {
-		case "SOURCE":
-			break;
-		case "DESTINATION":
-			//DOSomething
-			break;	
 		case "MAX":
 			//DOSomething
 			break;
@@ -31,22 +19,15 @@ public class Controller implements java.awt.event.ActionListener{
 		case "CLEAR":
 			model.setSource("");
 			model.setDestination("");
-			view.Source.setText("");
-			view.Destination.setText("");
+			view.clear();
+			//need to figure out how to clear the map.
+			view.getMapView().getMap().dispose();
 			break;
 		case "GO":
-			try {
-	            // TODO add your handling code here:
-				model.setSource(view.Source.getText());
-				model.setDestination(view.Destination.getText());
-	            JavaApplication7.getData(model.getSource(), model.getDestination());
-	        } catch (MalformedURLException ex) {
-	            Logger.getLogger(View.class.getName()).log(Level.SEVERE, null, ex);
-	        } catch (IOException ex) {
-	            Logger.getLogger(View.class.getName()).log(Level.SEVERE, null, ex);
-	        } catch (JSONException ex) {
-	            Logger.getLogger(View.class.getName()).log(Level.SEVERE, null, ex);
-	        }
+			//clear the map first then add more.	
+			model.setSource(view.getSrc());
+			model.setDestination(view.getDest());
+			view.getMapView().performGeocode(model.getSource(), model.getDestination());
 			break;
 		case "ADDFAV":
 			//DOSomething
@@ -62,8 +43,4 @@ public class Controller implements java.awt.event.ActionListener{
 	public void addView(View v){
 		this.view = v;
 	}
-
-	public void initModel(String default_adress){
-		model.setAddress(default_adress);
-	} 
 }

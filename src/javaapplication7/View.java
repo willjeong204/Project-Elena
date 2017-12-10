@@ -5,16 +5,15 @@ import java.awt.event.WindowAdapter;	//for CloseListener()
 import java.util.Observable;		//for update();
 import java.awt.event.ActionListener;	//for addController()
 
-import org.json.JSONException;
 
 import javax.swing.*;
 
 //View is an Observer
 import java.awt.*;
 
-import com.teamdev.jxmaps.MapViewOptions;
 
 
+@SuppressWarnings("serial")
 class View extends javax.swing.JFrame implements java.util.Observer {
 
 	//attributes as must be visible within class
@@ -23,8 +22,8 @@ class View extends javax.swing.JFrame implements java.util.Observer {
 	private JPanel panelinput = new JPanel();
 	private JLabel jLabelstart = new JLabel();
 	private JLabel jLabelend = new JLabel();;
-	public JTextField Destination = new JTextField();
-    public JTextField Source = new JTextField();;
+	private JTextField Destination = new JTextField();
+    private JTextField Source = new JTextField();;
     private JButton jButtonminele = new JButton();
     private JButton jButtonmaxele = new JButton();
     private JButton clear = new JButton();
@@ -35,6 +34,7 @@ class View extends javax.swing.JFrame implements java.util.Observer {
 	View() {
 		
         mapView = new Google_Map_UI();
+   
         
 		JFrame frame = new JFrame("Elevation Navigation Application");
 		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -42,7 +42,7 @@ class View extends javax.swing.JFrame implements java.util.Observer {
 		
 		//create 2 panels, this is top
         panelmap.setLayout( new BorderLayout() );
-		panelmap.add(mapView);
+        panelmap.add(mapView);
 		
 		//this is bot
 		GroupLayout panelinputLayout = new GroupLayout(panelinput);
@@ -65,9 +65,9 @@ class View extends javax.swing.JFrame implements java.util.Observer {
 		
 		jLabelstart.setText("Starting Point: ");
 		jLabelend.setText("Ending Point: ");
-		Source.setText("Type in your Destination in here");
+		Source.setText("");
 		Source.setActionCommand("SOURCE");
-		Destination.setText("Type in your Destination in here");
+		Destination.setText("");
 		Destination.setActionCommand("DESTINATION");
 		jButtonmaxele.setText("Maximum Elevation");
 		jButtonmaxele.setActionCommand("MAX");
@@ -127,18 +127,35 @@ class View extends javax.swing.JFrame implements java.util.Observer {
                )
             )
         );
-		
 	}
 
 	public void addController(ActionListener controller){
 		
-		Source.addActionListener(controller);
-		Destination.addActionListener(controller);
-		jButtonmaxele.addActionListener(controller);
-		jButtonminele.addActionListener(controller);
-		clear.addActionListener(controller);
-		go.addActionListener(controller);
-		jButtonaddfav.addActionListener(controller);
+		jButtonmaxele.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                controller.actionPerformed(evt);
+            }
+        });
+		jButtonminele.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                controller.actionPerformed(evt);
+            }
+        });
+		clear.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                controller.actionPerformed(evt);
+            }
+        });
+		go.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                controller.actionPerformed(evt);
+            }
+        });
+		jButtonaddfav.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                controller.actionPerformed(evt);
+            }
+        });
 	}
 	
 	public static class CloseListener extends WindowAdapter {
@@ -152,5 +169,20 @@ class View extends javax.swing.JFrame implements java.util.Observer {
 	public void update(Observable obs, Object obj) {
 
     	}
+	
+	public Google_Map_UI getMapView() {
+		return mapView;
+	}
+	
+	public String getSrc() {
+		return Source.getText();
+	}
+	public String getDest() {
+		return Destination.getText();
+	}
+	public void clear() {
+		Source.setText("");
+		Destination.setText("");
+	}
 
 } //View

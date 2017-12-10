@@ -17,9 +17,8 @@ import com.teamdev.jxmaps.Marker;
 import com.teamdev.jxmaps.MouseEvent;
 import com.teamdev.jxmaps.swing.MapView;
 
+@SuppressWarnings("serial")
 public class Google_Map_UI extends MapView {
-
-	private static final String INITIAL_LOCATION = "Amherst";
 
     public Google_Map_UI() {
     		// Setting of a ready handler to MapView object. onMapReady will be called when map initialization is done and
@@ -30,7 +29,7 @@ public class Google_Map_UI extends MapView {
 	            // Getting the associated map object
 	            final Map map = getMap();
 	            // Setting initial zoom value
-	            map.setZoom(7.0);
+	            map.setZoom(10.0);
 	            // Creating a map options object
 	            MapOptions options = new MapOptions();
 	            // Creating a map type control options object
@@ -41,12 +40,13 @@ public class Google_Map_UI extends MapView {
 	            options.setMapTypeControlOptions(controlOptions);
 	            // Setting map options
 	            map.setOptions(options);
+	            map.setCenter(new LatLng(42.340382, -72.496819));
 	
-	            performGeocode(INITIAL_LOCATION,"Boston");
+//	            performGeocode("Amherst","Boston");
 	        }
     		});
     }
-    private void performGeocode(String src, String dest) {
+    public void performGeocode(String src, String dest) {
         // Getting the associated map object
         final Map map = getMap();
         // Creating a geocode request
