@@ -171,7 +171,7 @@ public class Google_Map_UI extends MapView {
                     
                     map.setCenter(location);
                     // Creating a marker object
-                    Marker marker = new Marker(map);
+                    final Marker marker = new Marker(map);
                     // Setting position of the marker to the result location
                     marker.setPosition(location);
                     // Creating an information window
@@ -218,7 +218,7 @@ public class Google_Map_UI extends MapView {
                     
                     map.setCenter(location);
                     // Creating a marker object
-                    Marker marker = new Marker(map);
+                    final Marker marker = new Marker(map);
                     // Setting position of the marker to the result location
                     marker.setPosition(location);
                     // Creating an information window
