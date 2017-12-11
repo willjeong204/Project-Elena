@@ -1,9 +1,16 @@
 package javaapplication7;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javaapplication7.FindRoute;
+import javax.xml.parsers.ParserConfigurationException;
+import org.jdom2.JDOMException;
 
 import org.json.JSONException;
+import org.xml.sax.SAXException;
 
 public class Controller implements java.awt.event.ActionListener{
 	Model model;
@@ -14,6 +21,7 @@ public class Controller implements java.awt.event.ActionListener{
 	//invoked when a button is pressed
 	public void actionPerformed(java.awt.event.ActionEvent e){
 		String action = e.getActionCommand();
+                
 		switch (action) {
 		case "MAX":
 			//DOSomething
@@ -37,10 +45,21 @@ public class Controller implements java.awt.event.ActionListener{
 			try {
 				ArrayList<Integer> srcDst = new ArrayList<>();
 				srcDst = model.getNodeId(view.getMapView());
-				for (int i=0;i<srcDst.size();i++){
-				System.out.println("testing..."+srcDst.get(i));
-				}
-				//System.out.println("hereeeeeeeeeeee"+model.mapNodes.get(index).id);
+                                FindRoute r = new FindRoute();
+                try {
+                    model.final_route = r.route(model.mapNodes.get(srcDst.get(0)), model.mapNodes.get(srcDst.get(1)), model.mapNodes, model.indexIDMap,model.adjMatrix,10.0f,model.max_elevation, true);
+                } catch (MalformedURLException ex) {
+                    Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (IOException ex) {
+                    Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (JDOMException ex) {
+                    Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (ParserConfigurationException ex) {
+                    Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (SAXException ex) {
+                    Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
+                }
+				
 			} catch (IOException | JSONException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();

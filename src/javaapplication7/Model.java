@@ -26,7 +26,9 @@ public class Model extends java.util.Observable {
 	static HashMap<String,Integer> indexIDMap = new HashMap<>();
 	ArrayList<NodeObject> mapNodes;
 	ArrayList<NodeObject> routeNodes;
-
+        float max_elevation;
+        ArrayList<String> final_route = new ArrayList<String>();
+        
 	public Model() throws JDOMException, SAXException, IOException, Exception{
 
 		adjMatrix = readCSV();
@@ -34,6 +36,7 @@ public class Model extends java.util.Observable {
 		OsmParsing osm = new OsmParsing();
 		mapNodes = osm.parser();
 		indexIDMap = osm.indexIDMap;
+                max_elevation = osm.max_elevation;
 
 	}
 
@@ -126,7 +129,7 @@ public class Model extends java.util.Observable {
 		HashMap<String,ArrayList<String>> adjMatrix = new HashMap<>();
 		try
 		{
-			csvReader = new CSVReader(new FileReader("C:\\Users\\Darshana\\Desktop\\adjacency.csv"),',','"');
+			csvReader = new CSVReader(new FileReader("C:\\Users\\shrut\\Documents\\SE\\Project\\Project-Elena\\adjacency.csv"),',','"');
 			String[] adjList = null;
 			while((adjList = csvReader.readNext())!=null)
 			{

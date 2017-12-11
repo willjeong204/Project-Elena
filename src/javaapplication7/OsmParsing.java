@@ -25,6 +25,7 @@ import java.util.HashMap;
 
 public class OsmParsing {
     static HashMap<String,Integer> indexIDMap = new HashMap<>();
+    static float max_elevation;
     //static HashMap<String, ArrayList<String>> adjMatrix =readCSV();
     /*public static void main(String[] args) throws JDOMException, IOException, SAXException, ParserConfigurationException, Exception
     {
@@ -40,7 +41,7 @@ public class OsmParsing {
     }*/
     OsmParsing ()
     {
-        ;
+        max_elevation = 0.0f;
     }
 
 
@@ -49,7 +50,7 @@ public class OsmParsing {
 
         ArrayList<NodeObject> mapNodes = new ArrayList<NodeObject>();
 
-        File inputFile = new File("C:\\Users\\Darshana\\Desktop\\map.osm"); //Replace with your location of map.osm
+        File inputFile = new File("C:\\Users\\shrut\\Documents\\SE\\Project\\Project-Elena\\map.osm"); //Replace with your location of map.osm
 
         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
@@ -98,6 +99,7 @@ public class OsmParsing {
                 }
                 count++;
                 int k=0;
+                //float max = 0.0f;
                 if (count==350*n || count==nList.getLength()){
                     locStr= locStr.substring(0, locStr.length() - 1);
                     locList.add(locStr);
@@ -106,6 +108,8 @@ public class OsmParsing {
                     eleList =callElevationApi(locStr,mapNodes);
                     for (int i=350*(n-1);i<mapNodes.size();i++){
                         mapNodes.get(i).elevation = eleList.get(k);
+                        if(Float.parseFloat(eleList.get(k))>max_elevation)
+                                max_elevation = Float.parseFloat(eleList.get(k));
                         k++;
                     }
                     n++;
@@ -155,7 +159,7 @@ public class OsmParsing {
         return(eleList);
     }
 
-    public static float[][] getDistances(ArrayList<NodeObject> src, ArrayList<NodeObject> dst) throws MalformedURLException, IOException, JDOMException, ParserConfigurationException, SAXException
+    /*public static float[][] getDistances(ArrayList<NodeObject> src, ArrayList<NodeObject> dst) throws MalformedURLException, IOException, JDOMException, ParserConfigurationException, SAXException
     {
 
         HttpURLConnection connection = null;
@@ -233,7 +237,7 @@ public class OsmParsing {
         }
 
         return dis_mat;
-    }
+    }*/
 
 
     private static HashMap<String, ArrayList<String>> readCSV() {
