@@ -21,6 +21,8 @@ import com.teamdev.jxmaps.MapTypeControlOptions;
 import com.teamdev.jxmaps.MapTypeId;
 import com.teamdev.jxmaps.Marker;
 import com.teamdev.jxmaps.MouseEvent;
+import com.teamdev.jxmaps.Polyline;
+import com.teamdev.jxmaps.PolylineOptions;
 import com.teamdev.jxmaps.swing.MapView;
 
 @SuppressWarnings("serial")
@@ -34,11 +36,11 @@ public class Google_Map_UI extends MapView {
     			public void onMapReady(MapStatus status) {
 	            // Getting the associated map object
 	            final Map map = getMap();
-	            map.setCenter(new LatLng(42.3892763,-72.5295258));
+	            map.setCenter(new LatLng(42.389813,-72.528250));
 	            // Setting initial zoom value
-	            map.setZoom(15.0);
+	            map.setZoom(17.0);
 	            // Setting initial map type
-                map.setMapTypeId(MapTypeId.HYBRID);
+                map.setMapTypeId(MapTypeId.ROADMAP);
 	            // Creating a map options object
 	            MapOptions options = new MapOptions();
 	            // Creating a map type control options object
@@ -58,9 +60,49 @@ public class Google_Map_UI extends MapView {
                         showElevationInfo(map, mouseEvent.latLng(), false);
                     }
                 });
+//                drawRoute(map);
 //	            performGeocode("Amherst","Boston");
 	        }
     		});
+    }
+    
+    public void drawRoute(Map map) {
+    		LatLng[] path = { new LatLng(42.3892763,-72.5295258),
+    	    		new LatLng(42.3892487,-72.5295732),
+    	    		new LatLng(42.3890982,-72.5296371),
+    	    		new LatLng(42.3889294,-72.5296812),
+    	    		new LatLng(42.3887905,-72.5296963),
+    	    		new LatLng(42.3887713,-72.5297763),
+    	    		new LatLng(42.3888318,-72.5298010),
+    	    		new LatLng(42.3886812,-72.5304072),
+    	    		new LatLng(42.3886114,-72.5305812),
+    	    		new LatLng(42.3884862,-72.5308317),
+    	    		new LatLng(42.3883791,-72.5310670),
+    	    		new LatLng(42.3890323,-72.5313479),
+    	    		new LatLng(42.3892154,-72.5314204),
+    	    		new LatLng(42.3894712,-72.5315248),
+    	    		new LatLng(42.3894481,-72.5316186),
+    	    		new LatLng(42.3897066,-72.5317217),
+    	    		new LatLng(42.3897394,-72.5315574),
+    	    		new LatLng(42.3897790,-72.5313590),
+    	    		new LatLng(42.3898600,-72.5307200),
+    	    		new LatLng(42.3898690,-72.5306460),
+    	    		new LatLng(42.3898780,-72.5305720),
+    	    		new LatLng(42.3898920,-72.5304650),
+    	    		new LatLng(42.3899040,-72.5303570),
+    	    		new LatLng(42.3899150,-72.5302490),
+    	    		new LatLng(42.3901960,-72.5303680),
+    	    		new LatLng(42.3902190,-72.5303790),
+    	    		new LatLng(42.3902430,-72.5303890)};
+
+        Polyline polyline = new Polyline(map);
+        polyline.setPath(path);
+        PolylineOptions options = new PolylineOptions();
+        options.setGeodesic(true);
+        options.setStrokeColor("#FF0000");
+        options.setStrokeOpacity(1.0);
+        options.setStrokeWeight(2.0);
+        polyline.setOptions(options);
     }
     
     
@@ -118,9 +160,15 @@ public class Google_Map_UI extends MapView {
                 if ((status == GeocoderStatus.OK) && (results.length > 0)) {
                     // Getting the first result
                     GeocoderResult result = results[0];
+                    
+//                    //for testing purpose============================
+//                    LatLng location = new LatLng(42.3892763,-72.5295258);
+                    
                     // Getting a location of the result
-                    LatLng location = result.getGeometry().getLocation();
+                    LatLng location = result.getGeometry().getLocation();                  
                     // Setting the map center to result location
+                    
+                    
                     map.setCenter(location);
                     // Creating a marker object
                     final Marker marker = new Marker(map);
@@ -159,9 +207,15 @@ public class Google_Map_UI extends MapView {
                 if ((status == GeocoderStatus.OK) && (results.length > 0)) {
                     // Getting the first result
                     GeocoderResult result = results[0];
+                    
+                  //for testing purpose============================
+//                    LatLng location = new LatLng(42.3902430,-72.5303890);
+                    
                     // Getting a location of the result
                     LatLng location = result.getGeometry().getLocation();
                     // Setting the map center to result location
+                    
+                    
                     map.setCenter(location);
                     // Creating a marker object
                     final Marker marker = new Marker(map);

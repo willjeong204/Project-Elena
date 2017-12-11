@@ -28,6 +28,8 @@ public class Controller implements java.awt.event.ActionListener{
 			model.setSource(view.getSrc());
 			model.setDestination(view.getDest());
 			view.getMapView().performGeocode(model.getSource(), model.getDestination());
+			//store latlng in mode here
+			view.getMapView().drawRoute(view.getMapView().getMap());
 			break;
 		case "ADDFAV":
 			//DOSomething
