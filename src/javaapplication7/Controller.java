@@ -28,6 +28,7 @@ public class Controller implements java.awt.event.ActionListener{
 			model.setSource(view.getSrc());
 			model.setDestination(view.getDest());
 			view.getMapView().performGeocode(model.getSource(), model.getDestination());
+			//call routing algorithm
 			break;
 		case "ADDFAV":
 			//DOSomething
