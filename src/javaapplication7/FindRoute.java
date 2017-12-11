@@ -26,21 +26,21 @@ import java.util.HashMap;
  */
 public class FindRoute {
 
-    public static float getScore(float g, float h, float e)
+    public static float getScore(float g, float h, float e,float percentage,float max_e, boolean minimize_elevation)
     {
-        boolean minimize_elevation = true;
-        float percentage = 100.0f;
+        //boolean minimize_elevation = true;
+        //float percentage = 100.0f;
         float f;
-        float max_e = 100.0f;
+        //float max_e = 100.0f;
 
         if(minimize_elevation)
         {
-            f = g+h+(percentage*e);
+            f = percentage*(g+h)+e;
         }
         else
         {
             float compliment_e = max_e - e;
-            f = g+h+(percentage*compliment_e);
+            f = percentage*(g+h)+compliment_e;
         }
         return f;
     }
@@ -142,7 +142,7 @@ public class FindRoute {
      * @param adjMatrix : stores adjacent nodes for the required nodeIDs
      * @return : Boolean if a route was found or not
      */
-    public static boolean route(NodeObject source, NodeObject destination, ArrayList<NodeObject> mapNodes, HashMap<String,Integer> indexIDMap, HashMap<String, ArrayList<String>> adjMatrix) throws MalformedURLException, IOException, JDOMException, ParserConfigurationException, SAXException
+    public static ArrayList<String> route(NodeObject source, NodeObject destination, ArrayList<NodeObject> mapNodes, HashMap<String,Integer> indexIDMap, HashMap<String, ArrayList<String>> adjMatrix,float percentage,float max_e, boolean minimize_elevation) throws MalformedURLException, IOException, JDOMException, ParserConfigurationException, SAXException
     {
         ArrayList<NodeObject> src = new ArrayList<NodeObject>();
 
@@ -157,10 +157,10 @@ public class FindRoute {
             float cost;
             Node parent;
 
-            Node(NodeObject x, float y)
+            Node(NodeObject n_o, float co)
             {
-                o=x;
-                cost = y;
+                o=n_o;
+                cost = co;
             }
             Node()
             {
@@ -191,13 +191,15 @@ public class FindRoute {
 
             if(current.o.id.equals(dst.get(0).id))
             {
+                ArrayList<String> finalpath = new ArrayList<>();
                 while(current.parent!=null)
                 {
-                    System.out.println("("+current.o.lat+","+current.o.lng+")");
+                    
+                    finalpath.add("("+current.o.lat+","+current.o.lng+")");
                     current = current.parent;
                 }
-                System.out.println("("+current.o.lat+","+current.o.lng+")");
-                return true;
+                finalpath.add("("+current.o.lat+","+current.o.lng+")");
+                return finalpath;
             }
             System.out.println("current node: "+current.o.id);
             ArrayList<String> sourceAdjList = new ArrayList<String>();
@@ -222,7 +224,9 @@ public class FindRoute {
             for(int i=0;i<adj.size();i++)
             {
                 float score = 0.0f;
-                score = getScore(src_distance[0][i],+dst_distance[i][0],Float.parseFloat(adj.get(i).elevation));
+                float src_dist = src_distance[0][i];
+                float dst_dist = dst_distance[i][0];
+                score = getScore(src_dist,dst_dist,Float.parseFloat(adj.get(i).elevation),percentage, max_e,minimize_elevation);
 
                 Node neighbour = new Node(adj.get(i),score);
                 System.out.println("Neighbour of " + current.o.id + " is " + neighbour.o.id);
@@ -252,9 +256,15 @@ public class FindRoute {
                 }
 
                 if(open.isEmpty())
-                    System.out.println("empty");
-                else
-                    System.out.println("size"+open.size());
+                {
+                    //return false;//Check this incase of false!!!!!!!!
+                    //System.out.println("empty");
+                    ArrayList<String> finalpath = new ArrayList<String>();
+                    return finalpath;
+                    
+                }
+                //else
+                    //System.out.println("size"+open.size());
             }
         }
     }
