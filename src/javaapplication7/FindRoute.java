@@ -18,6 +18,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /****
  *This Method finds the best route based on user input (minimum elevation,
@@ -129,6 +130,133 @@ public class FindRoute {
         }
 
         return dis_mat;
+    }
+
+    /***
+     * Implemeted a* algorithm to find most optimized route between source and destination
+     *
+     * @param source
+     * @param destination
+     * @param mapNodes : Arraylist that stores nodeObjects
+     * @param indexIDMap : Stores mapping between index and nodeID
+     * @param adjMatrix : stores adjacent nodes for the required nodeIDs
+     * @return : Boolean if a route was found or not
+     */
+    public static boolean route(NodeObject source, NodeObject destination, ArrayList<NodeObject> mapNodes, HashMap<String,Integer> indexIDMap, HashMap<String, ArrayList<String>> adjMatrix) throws MalformedURLException, IOException, JDOMException, ParserConfigurationException, SAXException
+    {
+        ArrayList<NodeObject> src = new ArrayList<NodeObject>();
+
+        src.add(mapNodes.get(0));
+
+        ArrayList<NodeObject> dst = new ArrayList<NodeObject>();
+        dst.add(mapNodes.get(718));
+
+        class Node
+        {
+            NodeObject o;
+            float cost;
+            Node parent;
+
+            Node(NodeObject x, float y)
+            {
+                o=x;
+                cost = y;
+            }
+            Node()
+            {
+                ;
+            }
+        }
+        ArrayList<Node> open = new ArrayList<Node>();
+        ArrayList<NodeObject> closed =  new ArrayList<NodeObject>();
+
+        Node src_node;
+        src_node = new Node(src.get(0),0.0f);
+        src_node.parent = null;
+        open.add(src_node);
+
+        while(true)
+        {
+            Node current;
+            current = open.get(0);
+            for(int i=1; i<open.size();i++)
+            {
+                if(open.get(i).cost<current.cost)
+                    current = open.get(i);
+            }
+
+            open.remove(current);
+            closed.add(current.o);
+
+
+            if(current.o.id.equals(dst.get(0).id))
+            {
+                while(current.parent!=null)
+                {
+                    System.out.println("("+current.o.lat+","+current.o.lng+")");
+                    current = current.parent;
+                }
+                System.out.println("("+current.o.lat+","+current.o.lng+")");
+                return true;
+            }
+            System.out.println("current node: "+current.o.id);
+            ArrayList<String> sourceAdjList = new ArrayList<String>();
+            ArrayList<NodeObject> adj = new ArrayList<NodeObject>();
+            String nodeID =current.o.id;
+            sourceAdjList = adjMatrix.get(nodeID);
+            for(int m=0;m<sourceAdjList.size();m++){
+                int index = indexIDMap.get(sourceAdjList.get(m));
+                adj.add(mapNodes.get(index));
+            }
+
+            float src_distance[][];
+
+            ArrayList<NodeObject> cur_list = new ArrayList<NodeObject>();
+            cur_list.add(current.o);
+
+            src_distance = getDistances(cur_list, adj);
+
+            float dst_distance[][];
+            dst_distance = getDistances(adj,dst);
+
+            for(int i=0;i<adj.size();i++)
+            {
+                float score = 0.0f;
+                score = getScore(src_distance[0][i],+dst_distance[i][0],Float.parseFloat(adj.get(i).elevation));
+
+                Node neighbour = new Node(adj.get(i),score);
+                System.out.println("Neighbour of " + current.o.id + " is " + neighbour.o.id);
+                if(closed.contains(neighbour.o))
+                    continue;
+
+                boolean found = false;
+                for(int j=0; j<open.size(); j++)
+                {
+                    if(open.get(j).o.equals(neighbour.o))
+                    {
+                        found = true;
+                        if(open.get(j).cost<neighbour.cost)
+                        {
+                            open.get(j).cost = neighbour.cost;
+                            open.get(j).parent = current;
+                        }
+                        break;
+                    }
+                }
+
+                if(!found)
+                {
+                    neighbour.parent = current;
+                    open.add(neighbour);
+
+                }
+
+                if(open.isEmpty())
+                    System.out.println("empty");
+                else
+                    System.out.println("size"+open.size());
+            }
+        }
     }
 
 }
