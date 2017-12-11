@@ -11,7 +11,6 @@ import java.net.URL;
 import java.util.*;
 
 import org.jdom2.*;
-import org.jdom2.input.SAXBuilder;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -24,49 +23,20 @@ import org.w3c.dom.Element;
 
 import com.opencsv.CSVReader;
 
-
-/**
- *
- * @author shrut
- */
 public class OsmParsing {
     static HashMap<String,Integer> indexIDMap = new HashMap<>();
     static HashMap<String, ArrayList<String>> adjMatrix =readCSV();
     public static void main(String[] args) throws JDOMException, IOException, SAXException, ParserConfigurationException, Exception
     {
-        System.out.println(adjMatrix.get("66590928"));
         ArrayList<NodeObject> mapNodes = parser();
-        //makeWays();
-
         System.out.println(mapNodes.get(0).lat + mapNodes.get(0).lng);
-        System.out.println(mapNodes.get(718).lat + mapNodes.get(718).lng);
-        
-        
-        System.out.println(indexIDMap.get("66590928"));
-        
-        boolean result = route(mapNodes);
-        
+        System.out.println(mapNodes.get(718).lat + mapNodes.get(718).lng); 
+        boolean result = route(mapNodes);        
         if(result)
             System.out.println("true");
         else
             System.out.println("false");
-             
-        
-        //System.out.println(mapNodes.get(0).id);
-        /*.out.println(mapNodes.get(10).lat+","+mapNodes.get(10).lng);
-        System.out.println(mapNodes.get(11).lat+","+mapNodes.get(11).lng);
-        System.out.println(mapNodes.get(12).lat+","+mapNodes.get(12).lng);
-        System.out.println(mapNodes.get(13).lat+","+mapNodes.get(13).lng);
-        System.out.println(mapNodes.get(14).lat+","+mapNodes.get(14).lng);
-    
-        
-        System.out.println(mapNodes.get(10).elevation);
-        System.out.println(mapNodes.get(11).elevation);
-        System.out.println(mapNodes.get(12).elevation);
-        System.out.println(mapNodes.get(13).elevation);
-        System.out.println(mapNodes.get(14).elevation);
-    
-    */
+
     }
     
     
@@ -75,31 +45,24 @@ public class OsmParsing {
     
     ArrayList<NodeObject> mapNodes = new ArrayList<NodeObject>();
     
-    SAXBuilder saxBuilder = new SAXBuilder();
     File inputFile = new File("C:\\Users\\shrut\\Documents\\SE\\Project\\Project-Elena\\map.osm"); //Replace with your location of map.osm
-    Document document = saxBuilder.build(inputFile); 
     
     DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
     DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
     org.w3c.dom.Document doc = dBuilder.parse(inputFile);
     doc.getDocumentElement().normalize();
     
-    System.out.println("Root element :" + doc.getDocumentElement().getNodeName());
-    NodeList nList = doc.getElementsByTagName("node");
-   
+    NodeList nList = doc.getElementsByTagName("node");   
     String locStr=null;
     int count =0;
     ArrayList<String> locList = new ArrayList<String>();
     
     
-    int n=1;
-   
+    int n=1;  
     int index=0;
     for (int temp = 0; temp < nList.getLength(); temp++)
     {
         Node nNode = nList.item(temp);
-        //System.out.println(temp+1);
-        //System.out.println("\nCurrent Element :" + nNode.getNodeName());
         
         if (nNode.getNodeType() == Node.ELEMENT_NODE)
         {
@@ -146,35 +109,27 @@ public class OsmParsing {
         }
       }
     }
-    //System.out.println(indexIDMap); 
-    System.out.println(indexIDMap.get("66619669"));
-    System.out.println(indexIDMap.get("66669518"));
     return mapNodes;
     }
     
     
 	private static ArrayList<String> callElevationApi(String x, ArrayList<NodeObject> mapNodes) throws Exception {
-		// TODO Auto-generated method stub
 	    HttpURLConnection elevationConnection = null;          
 	    StringBuilder eleResult = new StringBuilder();
 	    String eleBase_url = "https://maps.googleapis.com/maps/api/elevation/xml?";
 	    String elekey = "&key=AIzaSyAqlZ9cPy0XZ0oPiW8p9c8t6r_8s2lWtIM";
 	    String locations = "&locations="+x;
 	    String eleFull_url = eleBase_url+locations+elekey;
-	    //System.out.println("locations..."+locations);
 	    URL eleUrl = new URL(eleFull_url);
-	    //URL url = new URL("https://maps.googleapis.com/maps/api/directions/xml?origin=hadley,MA,US&destination=Umass+amherst,MA,US&mode=bicycling&alternatives=true&key=AIzaSyDbJBCyTJBUmRSrlAOfzc4AbdjBqZgoSRU");
 	    elevationConnection = (HttpURLConnection) eleUrl.openConnection();
 	    elevationConnection.setRequestMethod("GET");
 	    
 	    BufferedReader ele_rd = new BufferedReader(new InputStreamReader(elevationConnection.getInputStream()));
 	    String eleLine;
-	    ArrayList<String> eleList = new ArrayList<String>();
-	    
+	    ArrayList<String> eleList = new ArrayList<String>();	    
 	    while ((eleLine = ele_rd.readLine()) != null) 
 	    {	    	     
 	  	  eleResult.append(eleLine);
-	  	  //System.out.println(eleLine);  
 	    }
 	    ele_rd.close();
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -183,8 +138,6 @@ public class OsmParsing {
         org.w3c.dom.Document doc= builder.parse(is);
         
 	    NodeList locList = doc.getDocumentElement().getElementsByTagName("result");
-	    //System.out.println(locList.getLength());    
-	    
 	    for (int temp = 0; temp < locList.getLength(); temp++)
 	    {
 	    	Node nNode = locList.item(temp);
@@ -223,7 +176,6 @@ public class OsmParsing {
         
         base_url = base_url.substring(0, base_url.length()-1);
         base_url = base_url + "&key=AIzaSyBJIhJ1NEia7je40oZbD35sV_6rbqcE9Zc";
-        //System.out.println(base_url);
         
         URL url = new URL(base_url);
         connection = (HttpURLConnection) url.openConnection();
@@ -232,35 +184,20 @@ public class OsmParsing {
         String line;
         
         while ((line = rd.readLine()) != null) 
-        {
-        	//System.out.println(line);       
+        {     
                 result.append(line);
         }
         rd.close(); 
-        
-        //int src_len =1;// src.size();
-        //int dst_len = 2;//dst.size();
         
         int src_len = src.size();
         int dst_len = dst.size();
         
         float dis_mat[][] =  new float[src_len][dst_len];
-        //parse file to get distance. 
-        
-        SAXBuilder saxBuilder = new SAXBuilder();
-        File inputFile = new File("C:\\Users\\shrut\\Documents\\SE\\Project\\Project-Elena\\src\\javaapplication7\\test.xml"); //Replace with your location of map.osm
-        Document document = saxBuilder.build(inputFile); 
-        
         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-        //org.w3c.dom.Document doc = dBuilder.parse(inputFile);
-        //doc.getDocumentElement().normalize();
-        
         InputSource is = new InputSource(new StringReader(result.toString()));
-         org.w3c.dom.Document doc = dBuilder.parse(is);
-        //doc.getDocumentElement().normalize();
-        
-        //System.out.println("Root element :" + doc.getDocumentElement().getNodeName());
+        org.w3c.dom.Document doc = dBuilder.parse(is);
+       
         NodeList rowList = doc.getElementsByTagName("row");
         ArrayList<Float> distances = new ArrayList<Float>();
         for (int temp = 0; temp < rowList.getLength(); temp++)
@@ -275,16 +212,10 @@ public class OsmParsing {
 		    {
 	        	Node eleNode = element.item(k).getLastChild();
 	        	eleNode = eleNode.getPreviousSibling();
-	        	//System.out.println("eleNode...."+eleNode.getNodeName());
 	        	String distance =eleNode.getFirstChild().getNextSibling().getTextContent();
-	        	//System.out.println(distance);
 	        	distances.add(Float.parseFloat(distance));
 		    }
 		    }
-	        //element.item(0).getChildNodes();
-	        //System.out.println("elevation..."+elevation);
-	        //eleList.add(elevation);	        
-	        
 	    }
         int distances_index =0;
         for(int row=0;row<src_len;row++)
@@ -293,8 +224,6 @@ public class OsmParsing {
         		{
         		dis_mat[row][col]=distances.get(distances_index);
         		distances_index+=1;
-        		//System.out.println("dis_mat[row][col]"+dis_mat[row][col]);
-        		//System.out.println("row"+row+"coulmn"+col);
         		}
         	
         }
@@ -353,25 +282,18 @@ public class OsmParsing {
             {
                 while(current.parent!=null)
                 {
-                    //System.out.print(current.o.id+"("+current.o.lat+","+current.o.lng+")"+"<-");
                     System.out.println("("+current.o.lat+","+current.o.lng+")");
                     current = current.parent;
                 }
-                //System.out.print(current.o.id+"("+current.o.lat+","+current.o.lng+")");
                 System.out.println("("+current.o.lat+","+current.o.lng+")");
                 return true;
             }
-            //if(open.isEmpty())
-                //break;
             System.out.println("current node: "+current.o.id);
             ArrayList<String> sourceAdjList = new ArrayList<String>();
             ArrayList<NodeObject> adj = new ArrayList<NodeObject>();
-            //sourceAdjList = readCSV(current.o);
-            //NodeObject source ;
             String nodeID =current.o.id;
             sourceAdjList = adjMatrix.get(nodeID);
             for(int m=0;m<sourceAdjList.size();m++){
-            	//System.out.println("hi" + sourceAdjList.get(m));
             	int index = indexIDMap.get(sourceAdjList.get(m));
             	adj.add(mapNodes.get(index));
             }
@@ -382,7 +304,6 @@ public class OsmParsing {
             cur_list.add(current.o);
                  
             src_distance = getDistances(cur_list, adj);
-            //src_distance
         
             float dst_distance[][];
             dst_distance = getDistances(adj,dst);
@@ -423,19 +344,12 @@ public class OsmParsing {
                     System.out.println("empyt");
                 else
                     System.out.println("size"+open.size());
-                
-                
             }
         }
-        
-        //return false;
-        
-        
     }
 
 
 	private static HashMap<String, ArrayList<String>> readCSV() {
-		// TODO Auto-generated method stub
 		CSVReader csvReader = null;
 		HashMap<String,ArrayList<String>> adjMatrix = new HashMap<>();
         try
@@ -449,9 +363,7 @@ public class OsmParsing {
             		lines.add(adjList[i]);
             	}
             	adjMatrix.put(adjList[0], lines);
-            	
             }
-            //System.out.println(adjMatrix.size());
         }
         catch(Exception ee)
         {
