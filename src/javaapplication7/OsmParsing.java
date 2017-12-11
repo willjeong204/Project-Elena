@@ -311,8 +311,8 @@ public class OsmParsing {
             for(int i=0;i<adj.size();i++)
             {
                 float score = 0.0f;
-                score = src_distance[0][i]+dst_distance[i][0]+Float.parseFloat(adj.get(i).elevation);
-                
+                score = getScore(src_distance[0][i],+dst_distance[i][0],Float.parseFloat(adj.get(i).elevation));
+                                
                 Node neighbour = new Node(adj.get(i),score);
                 System.out.println("Neighbour of " + current.o.id + " is " + neighbour.o.id);
                 if(closed.contains(neighbour.o))
@@ -383,6 +383,24 @@ public class OsmParsing {
 	return adjMatrix;
 
 	}
+        public static float getScore(float g, float h, float e)
+        {
+            boolean minimize_elevation = false;
+            float percentage = 1.0f;
+            float f;
+            float max_e = 100.0f;
+            
+            if(minimize_elevation)
+            {
+                f = g+h+(percentage*e);
+            }
+            else
+            {
+                float compliment_e = max_e - e;
+                f = g+h+(percentage*compliment_e);
+            }
+            return f;
+        }
 
 }
 
