@@ -1,7 +1,12 @@
 package javaapplication7;
 
+import java.io.IOException;
+
+import org.jdom2.JDOMException;
+import org.xml.sax.SAXException;
+
 public class RunApp {
-	public RunApp() {
+	public RunApp() throws JDOMException, SAXException, IOException, Exception {
 
 		//create Model and View
 		Model myModel = new Model();

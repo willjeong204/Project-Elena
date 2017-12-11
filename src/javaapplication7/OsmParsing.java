@@ -49,7 +49,7 @@ public class OsmParsing {
 
         ArrayList<NodeObject> mapNodes = new ArrayList<NodeObject>();
 
-        File inputFile = new File("C:\\Users\\Akanksha Sharma\\Desktop\\cs520-proj\\map.osm"); //Replace with your location of map.osm
+        File inputFile = new File("C:\\Users\\Darshana\\Desktop\\map.osm"); //Replace with your location of map.osm
 
         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();

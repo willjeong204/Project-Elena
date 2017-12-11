@@ -115,7 +115,7 @@ class View extends javax.swing.JFrame implements java.util.Observer {
 		
 	}
 
-	public void addController(ActionListener controller){
+	public void addController(final ActionListener controller){
 		
 		jButtonmaxele.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

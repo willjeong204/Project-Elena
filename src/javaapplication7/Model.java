@@ -46,7 +46,7 @@ public class Model extends java.util.Observable {
 		HashMap<String,ArrayList<String>> adjMatrix = new HashMap<>();
 		try
 		{
-			csvReader = new CSVReader(new FileReader("C:\\Users\\Akanksha Sharma\\Desktop\\cs520-proj\\adjacency.csv"),',','"');
+			csvReader = new CSVReader(new FileReader("C:\\Users\\Darshana\\Desktop\\adjacency.csv"),',','"');
 			String[] adjList = null;
 			while((adjList = csvReader.readNext())!=null)
 			{
