@@ -29,7 +29,7 @@ class View extends javax.swing.JFrame implements java.util.Observer {
     private JButton clear = new JButton();
     private JButton go = new JButton();;
     private JButton jButtonaddfav = new JButton();
-    private Google_Map_UI mapView;
+    public Google_Map_UI mapView;
 	
 	View() {
 		

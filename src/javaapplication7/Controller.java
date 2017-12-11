@@ -1,5 +1,10 @@
 package javaapplication7;
 
+import java.io.IOException;
+import java.util.ArrayList;
+
+import org.json.JSONException;
+
 public class Controller implements java.awt.event.ActionListener{
 	Model model;
 	View view;
@@ -28,11 +33,20 @@ public class Controller implements java.awt.event.ActionListener{
 			model.setSource(view.getSrc());
 			model.setDestination(view.getDest());
 			view.getMapView().performGeocode(model.getSource(), model.getDestination());
-
 			//call routing algorithm
-
+			try {
+				ArrayList<Integer> srcDst = new ArrayList<>();
+				srcDst = model.getNodeId(view.getMapView());
+				for (int i=0;i<srcDst.size();i++){
+				System.out.println("testing..."+srcDst.get(i));
+				}
+				//System.out.println("hereeeeeeeeeeee"+model.mapNodes.get(index).id);
+			} catch (IOException | JSONException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 			//store latlng in mode here
-			view.getMapView().drawRoute(view.getMapView().getMap());
+			//view.getMapView().drawRoute(view.getMapView().getMap());
 
 			break;
 		case "ADDFAV":

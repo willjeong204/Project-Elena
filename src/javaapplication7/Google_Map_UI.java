@@ -1,5 +1,7 @@
 package javaapplication7;
 
+import java.util.ArrayList;
+
 import com.teamdev.jxmaps.ControlPosition;
 import com.teamdev.jxmaps.ElevationCallback;
 import com.teamdev.jxmaps.ElevationResult;
@@ -28,6 +30,9 @@ import com.teamdev.jxmaps.swing.MapView;
 @SuppressWarnings("serial")
 public class Google_Map_UI extends MapView {
 	InfoWindow infoWindow;
+	public LatLng srcLatLng;
+	public LatLng destLatLng;
+	
     public Google_Map_UI() {
     		// Setting of a ready handler to MapView object. onMapReady will be called when map initialization is done and
     		// the map object is ready to use. Current implementation of onMapReady customizes the map object.
@@ -65,35 +70,47 @@ public class Google_Map_UI extends MapView {
 	        }
     		});
     }
-    
-    public void drawRoute(Map map) {
-    		LatLng[] path = { new LatLng(42.3892763,-72.5295258),
-    	    		new LatLng(42.3892487,-72.5295732),
-    	    		new LatLng(42.3890982,-72.5296371),
-    	    		new LatLng(42.3889294,-72.5296812),
-    	    		new LatLng(42.3887905,-72.5296963),
-    	    		new LatLng(42.3887713,-72.5297763),
-    	    		new LatLng(42.3888318,-72.5298010),
-    	    		new LatLng(42.3886812,-72.5304072),
-    	    		new LatLng(42.3886114,-72.5305812),
-    	    		new LatLng(42.3884862,-72.5308317),
-    	    		new LatLng(42.3883791,-72.5310670),
-    	    		new LatLng(42.3890323,-72.5313479),
-    	    		new LatLng(42.3892154,-72.5314204),
-    	    		new LatLng(42.3894712,-72.5315248),
-    	    		new LatLng(42.3894481,-72.5316186),
-    	    		new LatLng(42.3897066,-72.5317217),
-    	    		new LatLng(42.3897394,-72.5315574),
-    	    		new LatLng(42.3897790,-72.5313590),
-    	    		new LatLng(42.3898600,-72.5307200),
-    	    		new LatLng(42.3898690,-72.5306460),
-    	    		new LatLng(42.3898780,-72.5305720),
-    	    		new LatLng(42.3898920,-72.5304650),
-    	    		new LatLng(42.3899040,-72.5303570),
-    	    		new LatLng(42.3899150,-72.5302490),
-    	    		new LatLng(42.3901960,-72.5303680),
-    	    		new LatLng(42.3902190,-72.5303790),
-    	    		new LatLng(42.3902430,-72.5303890)};
+    /*
+    public void drawRoute(Map map, Model model) {
+    		ArrayList<String> list = new ArrayList<String>();
+    		list = model.getList();
+    		
+    		LatLng[] path = new LatLng[list.size()];
+    		for(int i = 0;i<path.length;i++) {
+    			double lat, lng;
+    			String[] latlng = list.get(i).split(",");
+    			lat = Double.parseDouble(latlng[0]);
+    			lng = Double.parseDouble(latlng[1]);
+    			path[i] = new LatLng(lat, lng);
+    		}
+    		
+//    		LatLng[] path = { new LatLng(42.3892763,-72.5295258),
+//    	    		new LatLng(42.3892487,-72.5295732),
+//    	    		new LatLng(42.3890982,-72.5296371),
+//    	    		new LatLng(42.3889294,-72.5296812),
+//    	    		new LatLng(42.3887905,-72.5296963),
+//    	    		new LatLng(42.3887713,-72.5297763),
+//    	    		new LatLng(42.3888318,-72.5298010),
+//    	    		new LatLng(42.3886812,-72.5304072),
+//    	    		new LatLng(42.3886114,-72.5305812),
+//    	    		new LatLng(42.3884862,-72.5308317),
+//    	    		new LatLng(42.3883791,-72.5310670),
+//    	    		new LatLng(42.3890323,-72.5313479),
+//    	    		new LatLng(42.3892154,-72.5314204),
+//    	    		new LatLng(42.3894712,-72.5315248),
+//    	    		new LatLng(42.3894481,-72.5316186),
+//    	    		new LatLng(42.3897066,-72.5317217),
+//    	    		new LatLng(42.3897394,-72.5315574),
+//    	    		new LatLng(42.3897790,-72.5313590),
+//    	    		new LatLng(42.3898600,-72.5307200),
+//    	    		new LatLng(42.3898690,-72.5306460),
+//    	    		new LatLng(42.3898780,-72.5305720),
+//    	    		new LatLng(42.3898920,-72.5304650),
+//    	    		new LatLng(42.3899040,-72.5303570),
+//    	    		new LatLng(42.3899150,-72.5302490),
+//    	    		new LatLng(42.3901960,-72.5303680),
+//    	    		new LatLng(42.3902190,-72.5303790),
+//    	    		new LatLng(42.3902430,-72.5303890)};
 
         Polyline polyline = new Polyline(map);
         polyline.setPath(path);
@@ -104,7 +121,7 @@ public class Google_Map_UI extends MapView {
         options.setStrokeWeight(2.0);
         polyline.setOptions(options);
     }
-    
+    */
     
     private void showElevationInfo(final Map map, final LatLng latLng, final boolean initial) {
         // Getting the elevation service instance
@@ -167,8 +184,8 @@ public class Google_Map_UI extends MapView {
                     // Getting a location of the result
                     LatLng location = result.getGeometry().getLocation();                  
                     // Setting the map center to result location
-                    
-                    
+                    srcLatLng = location;
+                   
                     map.setCenter(location);
                     // Creating a marker object
                     final Marker marker = new Marker(map);
@@ -214,8 +231,9 @@ public class Google_Map_UI extends MapView {
                     // Getting a location of the result
                     LatLng location = result.getGeometry().getLocation();
                     // Setting the map center to result location
-                    
-                    
+                    destLatLng = location;
+                    System.out.println("hiii...." +destLatLng.getLat());
+            		System.out.println("hiii..." +destLatLng.getLng());
                     map.setCenter(location);
                     // Creating a marker object
                     final Marker marker = new Marker(map);
@@ -242,4 +260,14 @@ public class Google_Map_UI extends MapView {
             }
         });
     }
+    
+    public LatLng getsrcLatLng() {
+    		return srcLatLng;
+    }
+    public LatLng getdestLatLng() {
+    	System.out.println("inside dest");
+    	System.out.println("hiii" +destLatLng.getLat());
+		System.out.println("hiii" +destLatLng.getLng());
+		return destLatLng;
+}
 }
