@@ -53,8 +53,8 @@ public class Model extends java.util.Observable {
 
 	public ArrayList<Integer> getNodeId(Google_Map_UI mapView) throws IOException, JSONException{
 		//Google_Map_UI ui =new Google_Map_UI();
-		double srcLat = 42.3892763;//
-		double srcLng =-72.5295258;// mapView.getsrcLatLng().getLng() ;
+		double srcLat = mapView.getsrcLatLng().getLat();//
+		double srcLng = mapView.getsrcLatLng().getLng();
 		System.out.println(srcLat);
 		System.out.println(srcLng);
 		double dstLat = 42.3892763;//mapView.destLatLng.getLat();
@@ -109,9 +109,11 @@ public class Model extends java.util.Observable {
 	          for ( int j=0;j<legs.length();j++){
 	              String nodeID=(String)legs.get(j).toString();
 	                  System.out.println("here"+nodeID);
+	                  if (indexIDMap.containsKey(nodeID)){
 	                  int index = indexIDMap.get(nodeID);
 	                  System.out.println("index"+index);
 	          				return index;
+	                  }
 	          			}
 	                  }
 	          

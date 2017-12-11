@@ -30,8 +30,8 @@ import com.teamdev.jxmaps.swing.MapView;
 @SuppressWarnings("serial")
 public class Google_Map_UI extends MapView {
 	InfoWindow infoWindow;
-	public LatLng srcLatLng;
-	public LatLng destLatLng;
+	static public LatLng srcLatLng;
+	static public LatLng destLatLng;
 	
     public Google_Map_UI() {
     		// Setting of a ready handler to MapView object. onMapReady will be called when map initialization is done and
@@ -70,7 +70,7 @@ public class Google_Map_UI extends MapView {
 	        }
     		});
     }
-    /*
+    
     public void drawRoute(Map map, Model model) {
     		ArrayList<String> list = new ArrayList<String>();
     		list = model.getList();
@@ -121,7 +121,7 @@ public class Google_Map_UI extends MapView {
         options.setStrokeWeight(2.0);
         polyline.setOptions(options);
     }
-    */
+    
     
     private void showElevationInfo(final Map map, final LatLng latLng, final boolean initial) {
         // Getting the elevation service instance
@@ -185,7 +185,15 @@ public class Google_Map_UI extends MapView {
                     LatLng location = result.getGeometry().getLocation();                  
                     // Setting the map center to result location
                     srcLatLng = location;
-                   
+                    /*srcLat = srcLatLng.getLat();
+                    srcLng = srcLatLng.getLng();
+                    public String srcLat=null;
+                	public String srcLng=null;
+                	public String destLat=null;
+                	public String destLng=null;*/
+                    
+                    System.out.println("srcLatLng" +srcLatLng.getLat());
+            		System.out.println("srcLatLng" +srcLatLng.getLng());
                     map.setCenter(location);
                     // Creating a marker object
                     final Marker marker = new Marker(map);
