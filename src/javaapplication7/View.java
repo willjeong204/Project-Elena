@@ -21,13 +21,15 @@ class View extends javax.swing.JFrame implements java.util.Observer {
 	private JPanel panelmap = new JPanel();
 	private JPanel panelinput = new JPanel();
 	private JLabel jLabelstart = new JLabel();
-	private JLabel jLabelend = new JLabel();;
+	private JLabel jLabelend = new JLabel();
+	private JLabel jLabelDev = new JLabel();
 	private JTextField Destination = new JTextField();
-    private JTextField Source = new JTextField();;
+    private JTextField Source = new JTextField();
+    private JTextField Deviation = new JTextField();
     private JButton jButtonminele = new JButton();
     private JButton jButtonmaxele = new JButton();
     private JButton clear = new JButton();
-    private JButton go = new JButton();;
+    private JButton go = new JButton();
     private JButton jButtonaddfav = new JButton();
     public Google_Map_UI mapView;
 	
@@ -49,7 +51,7 @@ class View extends javax.swing.JFrame implements java.util.Observer {
 		panelinput.setLayout(panelinputLayout);
 		
 		splitPane.setOneTouchExpandable(true);
-		splitPane.setDividerLocation(750);
+		splitPane.setDividerLocation(700);
 		splitPane.setTopComponent(panelmap);
 		splitPane.setBottomComponent(panelinput);
 	
@@ -65,10 +67,10 @@ class View extends javax.swing.JFrame implements java.util.Observer {
 		
 		jLabelstart.setText("Starting Point: ");
 		jLabelend.setText("Ending Point: ");
+		jLabelDev.setText("Enter Decimal Deviation: ");
 		Source.setText("");
-		Source.setActionCommand("SOURCE");
 		Destination.setText("");
-		Destination.setActionCommand("DESTINATION");
+		Deviation.setText("");
 		jButtonmaxele.setText("Maximum Elevation");
 		jButtonmaxele.setActionCommand("MAX");
 		jButtonminele.setText("Minimum Elevation");
@@ -83,11 +85,13 @@ class View extends javax.swing.JFrame implements java.util.Observer {
 		panelinputLayout.setHorizontalGroup(panelinputLayout.createSequentialGroup()
 			.addGroup(panelinputLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
 				.addComponent(jLabelstart)
-				.addComponent(jLabelend))
+				.addComponent(jLabelend)
+				.addComponent(jLabelDev))
 		    .addGroup(panelinputLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
 		    		.addComponent(jButtonminele)
 		    		.addComponent(Source, GroupLayout.PREFERRED_SIZE, 200, GroupLayout.PREFERRED_SIZE)
-		    		.addComponent(Destination, GroupLayout.PREFERRED_SIZE, 200, GroupLayout.PREFERRED_SIZE))
+		    		.addComponent(Destination, GroupLayout.PREFERRED_SIZE, 200, GroupLayout.PREFERRED_SIZE)
+		    		.addComponent(Deviation, GroupLayout.PREFERRED_SIZE, 200, GroupLayout.PREFERRED_SIZE))
 		    .addGroup(panelinputLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
 		    		.addComponent(jButtonmaxele)
 		    		.addGroup(panelinputLayout.createSequentialGroup()
@@ -96,7 +100,7 @@ class View extends javax.swing.JFrame implements java.util.Observer {
 		    		.addComponent(jButtonaddfav)
 		    )
 		);
-				
+					
 		panelinputLayout.setVerticalGroup(panelinputLayout.createSequentialGroup()
 		    .addGroup(panelinputLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
 		    		.addComponent(jButtonmaxele)
@@ -106,42 +110,48 @@ class View extends javax.swing.JFrame implements java.util.Observer {
 		    		.addComponent(Source, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 		    		.addComponent(clear)
 	    			.addComponent(go))
-		    .addGroup(panelinputLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+		    .addGroup(panelinputLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
 		    		.addComponent(jLabelend)
 		    		.addComponent(Destination, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-		    		.addComponent(jButtonaddfav)
-		    	)
+		    		.addComponent(jButtonaddfav))
+		    .addGroup(panelinputLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+		    		.addComponent(jLabelDev)
+		    		.addComponent(Deviation, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
 		);
 		
 	}
 
 	public void addController(final ActionListener controller){
-		
-		jButtonmaxele.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                controller.actionPerformed(evt);
-            }
-        });
-		jButtonminele.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                controller.actionPerformed(evt);
-            }
-        });
-		clear.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                controller.actionPerformed(evt);
-            }
-        });
-		go.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                controller.actionPerformed(evt);
-            }
-        });
-		jButtonaddfav.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                controller.actionPerformed(evt);
-            }
-        });
+		jButtonmaxele.addActionListener(controller);
+		jButtonminele.addActionListener(controller);
+		clear.addActionListener(controller);
+		go.addActionListener(controller);
+		jButtonaddfav.addActionListener(controller);
+//		jButtonmaxele.addActionListener(new java.awt.event.ActionListener() {
+//            public void actionPerformed(java.awt.event.ActionEvent evt) {
+//                controller.actionPerformed(evt);
+//            }
+//        });
+//		jButtonminele.addActionListener(new java.awt.event.ActionListener() {
+//            public void actionPerformed(java.awt.event.ActionEvent evt) {
+//                controller.actionPerformed(evt);
+//            }
+//        });
+//		clear.addActionListener(new java.awt.event.ActionListener() {
+//            public void actionPerformed(java.awt.event.ActionEvent evt) {
+//                controller.actionPerformed(evt);
+//            }
+//        });
+//		go.addActionListener(new java.awt.event.ActionListener() {
+//            public void actionPerformed(java.awt.event.ActionEvent evt) {
+//                controller.actionPerformed(evt);
+//            }
+//        });
+//		jButtonaddfav.addActionListener(new java.awt.event.ActionListener() {
+//            public void actionPerformed(java.awt.event.ActionEvent evt) {
+//                controller.actionPerformed(evt);
+//            }
+//        });
 	}
 	
 	public static class CloseListener extends WindowAdapter {
