@@ -34,9 +34,9 @@ public class Google_Map_UI extends MapView {
     			public void onMapReady(MapStatus status) {
 	            // Getting the associated map object
 	            final Map map = getMap();
-	            map.setCenter(new LatLng(42.340382, -72.496819));
+	            map.setCenter(new LatLng(42.3892763,-72.5295258));
 	            // Setting initial zoom value
-	            map.setZoom(7.0);
+	            map.setZoom(15.0);
 	            // Setting initial map type
                 map.setMapTypeId(MapTypeId.HYBRID);
 	            // Creating a map options object
@@ -123,7 +123,7 @@ public class Google_Map_UI extends MapView {
                     // Setting the map center to result location
                     map.setCenter(location);
                     // Creating a marker object
-                    Marker marker = new Marker(map);
+                    final Marker marker = new Marker(map);
                     // Setting position of the marker to the result location
                     marker.setPosition(location);
                     // Creating an information window
@@ -164,7 +164,7 @@ public class Google_Map_UI extends MapView {
                     // Setting the map center to result location
                     map.setCenter(location);
                     // Creating a marker object
-                    Marker marker = new Marker(map);
+                    final Marker marker = new Marker(map);
                     // Setting position of the marker to the result location
                     marker.setPosition(location);
                     // Creating an information window
