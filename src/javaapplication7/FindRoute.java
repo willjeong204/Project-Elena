@@ -36,11 +36,13 @@ public class FindRoute {
         if(minimize_elevation)
         {
             f = percentage*(g+h);//+e;
+            f = g+h+e;
         }
         else
         {
             float compliment_e = max_e - e;
             f = percentage*(g+h);//+compliment_e;
+            f = g+h+compliment_e;
         }
         return f;
     }
@@ -76,7 +78,7 @@ public class FindRoute {
         }
 
         base_url = base_url.substring(0, base_url.length()-1);
-        base_url = base_url + "&key=AIzaSyC09ucCu9jMeI9zP7tEp5fkMkEaKMg9UGI";
+        base_url = base_url + "&key=AIzaSyCjJoBqraiOQIOtvs3ofRRYcwPOSbjbxhg";
 
         URL url = new URL(base_url);
         connection = (HttpURLConnection) url.openConnection();
@@ -119,10 +121,14 @@ public class FindRoute {
             }
         }
         int distances_index =0;
+        System.out.println(src_len);
+        System.out.println(dst_len);
+        System.out.println(distances.size());
         for(int row=0;row<src_len;row++)
         {
             for(int col = 0; col<dst_len;col++)
             {
+                
                 dis_mat[row][col]=distances.get(distances_index);
                 distances_index+=1;
             }
