@@ -24,15 +24,18 @@ public class Controller implements java.awt.event.ActionListener{
                 
 		switch (action) {
 		case "MAX":
-			//DOSomething
+			model.setisMax(true);
+			model.setisMin(false);
 			break;
 		case "MIN":
-			//DOSomething
+			model.setisMax(false);
+			model.setisMin(true);
 			break;
 		case "CLEAR":
 			model.setSource("");
 			model.setDestination("");
 			view.clear();
+//			view.getMapView().getMap().get
 			//need to figure out how to clear the map.
 //			view.getMapView().getMap().dispose();
 			break;
@@ -41,13 +44,19 @@ public class Controller implements java.awt.event.ActionListener{
 			model.setSource(view.getSrc());
 			model.setDestination(view.getDest());
 			view.getMapView().performGeocode(model.getSource(), model.getDestination());
+			try {
+				Thread.sleep(1000);
+			} catch (InterruptedException e2) {
+				// TODO Auto-generated catch block
+				e2.printStackTrace();
+			}
 			//call routing algorithm
 			try {
 				ArrayList<Integer> srcDst = new ArrayList<>();
 				srcDst = model.getNodeId(view.getMapView());
                                 FindRoute r = new FindRoute();
                 try {
-                    model.final_route = r.route(model.mapNodes.get(srcDst.get(0)), model.mapNodes.get(srcDst.get(1)), model.mapNodes, model.indexIDMap,model.adjMatrix,10.0f,model.max_elevation, true);
+                    model.final_route = r.route(model.mapNodes.get(srcDst.get(0)), model.mapNodes.get(srcDst.get(1)), model.mapNodes, model.indexIDMap,model.adjMatrix,1.0f,model.max_elevation, true);
                 } catch (MalformedURLException ex) {
                     Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (IOException ex) {
@@ -64,8 +73,9 @@ public class Controller implements java.awt.event.ActionListener{
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
+			
 			//store latlng in mode here
-			//view.getMapView().drawRoute(view.getMapView().getMap());
+			view.getMapView().drawRoute(view.getMapView().getMap(), model);
 
 			break;
 		case "ADDFAV":

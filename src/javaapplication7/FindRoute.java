@@ -35,12 +35,12 @@ public class FindRoute {
 
         if(minimize_elevation)
         {
-            f = percentage*(g+h)+e;
+            f = percentage*(g+h);//+e;
         }
         else
         {
             float compliment_e = max_e - e;
-            f = percentage*(g+h)+compliment_e;
+            f = percentage*(g+h);//+compliment_e;
         }
         return f;
     }
@@ -76,7 +76,7 @@ public class FindRoute {
         }
 
         base_url = base_url.substring(0, base_url.length()-1);
-        base_url = base_url + "&key=AIzaSyBJIhJ1NEia7je40oZbD35sV_6rbqcE9Zc";
+        base_url = base_url + "&key=AIzaSyC09ucCu9jMeI9zP7tEp5fkMkEaKMg9UGI";
 
         URL url = new URL(base_url);
         connection = (HttpURLConnection) url.openConnection();
@@ -146,10 +146,10 @@ public class FindRoute {
     {
         ArrayList<NodeObject> src = new ArrayList<NodeObject>();
 
-        src.add(mapNodes.get(0));
+        src.add(source);
 
         ArrayList<NodeObject> dst = new ArrayList<NodeObject>();
-        dst.add(mapNodes.get(718));
+        dst.add(destination);
 
         class Node
         {
@@ -195,10 +195,10 @@ public class FindRoute {
                 while(current.parent!=null)
                 {
                     
-                    finalpath.add("("+current.o.lat+","+current.o.lng+")");
+                    finalpath.add(current.o.lat+","+current.o.lng);
                     current = current.parent;
                 }
-                finalpath.add("("+current.o.lat+","+current.o.lng+")");
+                finalpath.add(current.o.lat+","+current.o.lng);
                 return finalpath;
             }
             System.out.println("current node: "+current.o.id);

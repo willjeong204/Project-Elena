@@ -50,7 +50,7 @@ public class OsmParsing {
 
         ArrayList<NodeObject> mapNodes = new ArrayList<NodeObject>();
 
-        File inputFile = new File("C:\\Users\\shrut\\Documents\\SE\\Project\\Project-Elena\\map.osm"); //Replace with your location of map.osm
+        File inputFile = new File("/Users/evanszhang/git/Project-Elena/map.osm"); //Replace with your location of map.osm
 
         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();

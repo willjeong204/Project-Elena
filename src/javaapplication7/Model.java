@@ -22,6 +22,7 @@ import java.util.List;
 public class Model extends java.util.Observable {
 	private String source;
 	private String destination;
+	private boolean isMax, isMin;
 	static HashMap<String, ArrayList<String>> adjMatrix;
 	static HashMap<String,Integer> indexIDMap = new HashMap<>();
 	ArrayList<NodeObject> mapNodes;
@@ -40,7 +41,18 @@ public class Model extends java.util.Observable {
 
 	}
 
-
+	public boolean getisMax() {
+		return isMax;
+	}
+	public boolean getisMin() {
+		return isMin;
+	}
+	public void setisMax(boolean value) {
+		isMax = value;
+	}
+	public void setisMin(boolean value) {
+		isMin = value;
+	}
 	public void setSource(String src) {
 		source = src;
 	}
@@ -60,8 +72,8 @@ public class Model extends java.util.Observable {
 		double srcLng = mapView.getsrcLatLng().getLng();
 		System.out.println(srcLat);
 		System.out.println(srcLng);
-		double dstLat = 42.3892763;//mapView.destLatLng.getLat();
-		double dstLng =-72.5295258; //mapView.destLatLng.getLng() ;
+		double dstLat = mapView.destLatLng.getLat();
+		double dstLng = mapView.destLatLng.getLng() ;
 		System.out.println(dstLat);
 		System.out.println(dstLng);
 		ArrayList<Integer> srcDestIndex = new ArrayList<>();
@@ -79,7 +91,7 @@ public class Model extends java.util.Observable {
 		List<String> testArray = new ArrayList<String>();
         HttpURLConnection connection = null;
 		 StringBuilder result = new StringBuilder();
-	        String base_url = "http://router.project-osrm.org/nearest/v1/driving/";
+	        String base_url = "http://router.project-osrm.org/nearest/v1/foot/";
 	        String location = lng + "," +lat;
 	        String number = "?number=3";
 	        String bearings = "&bearings=0,20";
@@ -129,7 +141,7 @@ public class Model extends java.util.Observable {
 		HashMap<String,ArrayList<String>> adjMatrix = new HashMap<>();
 		try
 		{
-			csvReader = new CSVReader(new FileReader("C:\\Users\\shrut\\Documents\\SE\\Project\\Project-Elena\\adjacency.csv"),',','"');
+			csvReader = new CSVReader(new FileReader("/Users/evanszhang/git/Project-Elena/adjacency.csv"),',','"');
 			String[] adjList = null;
 			while((adjList = csvReader.readNext())!=null)
 			{
