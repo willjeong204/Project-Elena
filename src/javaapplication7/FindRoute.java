@@ -35,14 +35,14 @@ public class FindRoute {
 
         if(minimize_elevation)
         {
-            f = percentage*(g+h);//+e;
-            f = g+h+e;
+            f = percentage*(g+h)+e;
+            //f = g+h+e;
         }
         else
         {
             float compliment_e = max_e - e;
-            f = percentage*(g+h);//+compliment_e;
-            f = g+h+compliment_e;
+            f = percentage*(g+h)+compliment_e;
+            //f = g+h+compliment_e;
         }
         return f;
     }
@@ -78,7 +78,7 @@ public class FindRoute {
         }
 
         base_url = base_url.substring(0, base_url.length()-1);
-        base_url = base_url + "&key=AIzaSyCjJoBqraiOQIOtvs3ofRRYcwPOSbjbxhg";
+        base_url = base_url + "&key=AIzaSyAcDAAqaAx5oGyrBEqPlH8pP5y_kRiXFKo";
 
         URL url = new URL(base_url);
         connection = (HttpURLConnection) url.openConnection();
@@ -121,9 +121,9 @@ public class FindRoute {
             }
         }
         int distances_index =0;
-        System.out.println(src_len);
-        System.out.println(dst_len);
-        System.out.println(distances.size());
+       // System.out.println(src_len);
+        //System.out.println(dst_len);
+        //System.out.println(distances.size());
         for(int row=0;row<src_len;row++)
         {
             for(int col = 0; col<dst_len;col++)
@@ -207,7 +207,7 @@ public class FindRoute {
                 finalpath.add(current.o.lat+","+current.o.lng);
                 return finalpath;
             }
-            System.out.println("current node: "+current.o.id);
+          //  System.out.println("current node: "+current.o.id);
             ArrayList<String> sourceAdjList = new ArrayList<String>();
             ArrayList<NodeObject> adj = new ArrayList<NodeObject>();
             String nodeID =current.o.id;
@@ -235,7 +235,7 @@ public class FindRoute {
                 score = getScore(src_dist,dst_dist,Float.parseFloat(adj.get(i).elevation),percentage, max_e,minimize_elevation);
 
                 Node neighbour = new Node(adj.get(i),score);
-                System.out.println("Neighbour of " + current.o.id + " is " + neighbour.o.id);
+               // System.out.println("Neighbour of " + current.o.id + " is " + neighbour.o.id);
                 if(closed.contains(neighbour.o))
                     continue;
 
