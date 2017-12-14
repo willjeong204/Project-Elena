@@ -51,19 +51,27 @@ public class Model extends java.util.Observable {
         return isMin;
     }
     public void setisMax(boolean value) {
-        isMax = value;
+		isMax = value;
+		setChanged();
+		notifyObservers(value);
     }
     public void setisMin(boolean value) {
-        isMin = value;
+      isMin = value;
+      setChanged();
+      notifyObservers(value);
     }
     public void setSource(String src) {
-        source = src;
+      source = src;
+      setChanged();
+      notifyObservers(src);
     }
     public String getSource() {
-        return source;
+      return source;
     }
     public void setDestination(String dest) {
-        destination = dest;
+      destination = dest;
+      setChanged();
+      notifyObservers(dest);
     }
     public String getDestination() {
         return destination;
@@ -180,5 +188,4 @@ public class Model extends java.util.Observable {
         sb.delete(0, sb.length());
         pw.flush();
     }
-
 }

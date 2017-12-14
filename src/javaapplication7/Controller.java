@@ -22,18 +22,17 @@ public class Controller implements java.awt.event.ActionListener{
 		String action = e.getActionCommand();
 
 		switch (action) {
-			case "MAX":
-				model.setisMax(true);
-				model.setisMin(false);
-				break;
-			case "MIN":
-				model.setisMax(false);
-				model.setisMin(true);
-				break;
-			case "CLEAR":
-				model.setSource("");
-				model.setDestination("");
-				view.clear();
+		case "MAX":
+			model.setisMax(true);
+			model.setisMin(false);
+			break;
+		case "MIN":
+			model.setisMax(false);
+			model.setisMin(true);
+			break;
+		case "CLEAR":
+			model.setSource("");
+			model.setDestination("");
 //			view.getMapView().getMap().get
 				//need to figure out how to clear the map.
 //			view.getMapView().getMap().dispose();
