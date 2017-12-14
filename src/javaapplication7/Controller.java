@@ -11,10 +11,12 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.swing.JOptionPane;
+
 public class Controller implements java.awt.event.ActionListener{
 	Model model;
 	View view;
-
+	private String goStatus;
 	Controller() {}
 
 	//invoked when a button is pressed
@@ -31,11 +33,13 @@ public class Controller implements java.awt.event.ActionListener{
 			model.setisMin(true);
 			break;
 		case "CLEAR":
+			this.goStatus = "";
 			model.setSource("");
 			model.setDestination("");
 			model.setMapObj(new Google_Map_UI());
 				break;
 			case "GO":
+				this.goStatus = "Ok";
 				String[] inputs = new String[2];
 				inputs[0] = view.getSrc();
 				inputs[1] = view.getDest();
@@ -90,17 +94,25 @@ public class Controller implements java.awt.event.ActionListener{
 				break;
 			case "ADDFAV":
 				//String routeName= "abc"
-				String routeStr = "";
-				//model.fav_source_dest.add(routeName);
-
-				System.out.println(model.final_route);
-
-				for (String s : model.final_route)
-				{
-					routeStr += s + ";";
+				if(!this.goStatus.equals("Ok")){
+					//To disable if user had not pressed go yet
 				}
+				else{
+					JOptionPane.showConfirmDialog(view, model.getSource() + " and" + model.getDestination() + " has been added to favorites.");
+					String routeStr = "";
+					//model.fav_source_dest.add(routeName);
 
-				model.writeToFavsFile(routeStr);
+					System.out.println(model.final_route);
+
+					for (String s : model.final_route)
+					{
+						routeStr += s + ";";
+					}
+
+					model.writeToFavsFile(routeStr);
+					this.goStatus = "";
+				}
+				
 				break;
 		}
 
