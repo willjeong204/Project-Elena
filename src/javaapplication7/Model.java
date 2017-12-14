@@ -13,7 +13,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -49,18 +48,26 @@ public class Model extends java.util.Observable {
 	}
 	public void setisMax(boolean value) {
 		isMax = value;
+		setChanged();
+		notifyObservers(value);
 	}
 	public void setisMin(boolean value) {
 		isMin = value;
+		setChanged();
+		notifyObservers(value);
 	}
 	public void setSource(String src) {
 		source = src;
+		setChanged();
+		notifyObservers(src);
 	}
 	public String getSource() {
 		return source;
 	}
 	public void setDestination(String dest) {
 		destination = dest;
+		setChanged();
+		notifyObservers(dest);
 	}
 	public String getDestination() {
 		return destination;
@@ -141,7 +148,7 @@ public class Model extends java.util.Observable {
 		HashMap<String,ArrayList<String>> adjMatrix = new HashMap<>();
 		try
 		{
-			csvReader = new CSVReader(new FileReader("C:\\Users\\shrut\\Documents\\SE\\Project\\Project-Elena\\adjacency.csv"),',','"');
+			csvReader = new CSVReader(new FileReader("/Users/evanszhang/git/Project-Elena/adjacency.csv"),',','"');
 			String[] adjList = null;
 			while((adjList = csvReader.readNext())!=null)
 			{

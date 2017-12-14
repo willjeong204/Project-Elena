@@ -26,8 +26,8 @@ class View extends javax.swing.JFrame implements java.util.Observer {
 	private JTextField Destination = new JTextField();
     private JTextField Source = new JTextField();
     private JTextField Deviation = new JTextField();
-    private JButton jButtonminele = new JButton();
-    private JButton jButtonmaxele = new JButton();
+    private JToggleButton jToggleminele = new JToggleButton();
+    private JToggleButton jTogglemaxele = new JToggleButton();
     private JButton clear = new JButton();
     private JButton go = new JButton();
     private JButton jButtonaddfav = new JButton();
@@ -71,10 +71,10 @@ class View extends javax.swing.JFrame implements java.util.Observer {
 		Source.setText("");
 		Destination.setText("");
 		Deviation.setText("");
-		jButtonmaxele.setText("Maximum Elevation");
-		jButtonmaxele.setActionCommand("MAX");
-		jButtonminele.setText("Minimum Elevation");
-		jButtonminele.setActionCommand("MIN");
+		jTogglemaxele.setText("Maximum Elevation");
+		jTogglemaxele.setActionCommand("MAX");
+		jToggleminele.setText("Minimum Elevation");
+		jToggleminele.setActionCommand("MIN");
 		clear.setText("Clear");
 		clear.setActionCommand("CLEAR");
 		go.setText("Go");
@@ -88,12 +88,12 @@ class View extends javax.swing.JFrame implements java.util.Observer {
 				.addComponent(jLabelend)
 				.addComponent(jLabelDev))
 		    .addGroup(panelinputLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-		    		.addComponent(jButtonminele)
+		    		.addComponent(jToggleminele)
 		    		.addComponent(Source, GroupLayout.PREFERRED_SIZE, 200, GroupLayout.PREFERRED_SIZE)
 		    		.addComponent(Destination, GroupLayout.PREFERRED_SIZE, 200, GroupLayout.PREFERRED_SIZE)
 		    		.addComponent(Deviation, GroupLayout.PREFERRED_SIZE, 200, GroupLayout.PREFERRED_SIZE))
 		    .addGroup(panelinputLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-		    		.addComponent(jButtonmaxele)
+		    		.addComponent(jTogglemaxele)
 		    		.addGroup(panelinputLayout.createSequentialGroup()
 		    			.addComponent(clear)
 		    			.addComponent(go))
@@ -103,8 +103,8 @@ class View extends javax.swing.JFrame implements java.util.Observer {
 					
 		panelinputLayout.setVerticalGroup(panelinputLayout.createSequentialGroup()
 		    .addGroup(panelinputLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-		    		.addComponent(jButtonmaxele)
-				.addComponent(jButtonminele))
+		    		.addComponent(jTogglemaxele)
+				.addComponent(jToggleminele))
 		    .addGroup(panelinputLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
 		    		.addComponent(jLabelstart)
 		    		.addComponent(Source, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
@@ -122,44 +122,19 @@ class View extends javax.swing.JFrame implements java.util.Observer {
 	}
 
 	public void addController(final ActionListener controller){
-		jButtonmaxele.addActionListener(controller);
-		jButtonminele.addActionListener(controller);
+		jTogglemaxele.addActionListener(controller);
+		jToggleminele.addActionListener(controller);
 		clear.addActionListener(controller);
 		go.addActionListener(controller);
 		jButtonaddfav.addActionListener(controller);
-//		jButtonmaxele.addActionListener(new java.awt.event.ActionListener() {
-//            public void actionPerformed(java.awt.event.ActionEvent evt) {
-//                controller.actionPerformed(evt);
-//            }
-//        });
-//		jButtonminele.addActionListener(new java.awt.event.ActionListener() {
-//            public void actionPerformed(java.awt.event.ActionEvent evt) {
-//                controller.actionPerformed(evt);
-//            }
-//        });
-//		clear.addActionListener(new java.awt.event.ActionListener() {
-//            public void actionPerformed(java.awt.event.ActionEvent evt) {
-//                controller.actionPerformed(evt);
-//            }
-//        });
-//		go.addActionListener(new java.awt.event.ActionListener() {
-//            public void actionPerformed(java.awt.event.ActionEvent evt) {
-//                controller.actionPerformed(evt);
-//            }
-//        });
-//		jButtonaddfav.addActionListener(new java.awt.event.ActionListener() {
-//            public void actionPerformed(java.awt.event.ActionEvent evt) {
-//                controller.actionPerformed(evt);
-//            }
-//        });
 	}
 	
 	public static class CloseListener extends WindowAdapter {
 		public void windowClosing(WindowEvent e) {
 			e.getWindow().setVisible(false);
 			System.exit(0);
-		} //windowClosing()
-	} //CloseListener
+		}
+	}
 	
 	public Google_Map_UI getMapView() {
 		return mapView;
@@ -171,14 +146,20 @@ class View extends javax.swing.JFrame implements java.util.Observer {
 	public String getDest() {
 		return Destination.getText();
 	}
-	public void clear() {
-		Source.setText("");
-		Destination.setText("");
-	}
 
 	@Override
-	public void update(Observable o, Object arg) {
+	public void update(Observable obs, Object obj) {
 		// TODO Auto-generated method stub
+		if(obj.toString().equals("true") || obj.toString().equals("false")) {
+			System.out.println("View      : Observable is " + obs.getClass() + ", object passed is " + obj.getClass());
+			jToggleminele.setSelected((boolean) obj);
+			jTogglemaxele.setSelected(!(boolean) obj);
+		}
+		
+		if(obj.toString().equals("")) {
+			Source.setText(obj.toString());
+			Destination.setText(obj.toString());
+		}
 		
 	}
 

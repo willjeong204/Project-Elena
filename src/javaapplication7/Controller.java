@@ -34,7 +34,6 @@ public class Controller implements java.awt.event.ActionListener{
 		case "CLEAR":
 			model.setSource("");
 			model.setDestination("");
-			view.clear();
 //			view.getMapView().getMap().get
 			//need to figure out how to clear the map.
 //			view.getMapView().getMap().dispose();
