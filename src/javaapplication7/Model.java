@@ -150,9 +150,10 @@ public class Model extends java.util.Observable {
     private static HashMap<String, ArrayList<String>> readCSV() {
         CSVReader csvReader = null;
         HashMap<String,ArrayList<String>> adjMatrix = new HashMap<>();
+        String filelocation = System.getProperty("user.dir");
         try
         {
-            csvReader = new CSVReader(new FileReader("C:\\Users\\Akanksha Sharma\\IdeaProjects\\projectElena-Local\\src\\javaapplication7\\adjacency.csv"),',','"');
+            csvReader = new CSVReader(new FileReader(filelocation+"/adjacency.csv"),',','"');
             String[] adjList = null;
             while((adjList = csvReader.readNext())!=null)
             {
