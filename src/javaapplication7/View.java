@@ -17,6 +17,7 @@ import java.awt.*;
 class View extends javax.swing.JFrame implements java.util.Observer {
 
 	//attributes as must be visible within class
+	private JFrame frame = new JFrame("Elevation Navigation Application");
 	private JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
 	private JPanel panelmap = new JPanel();
 	private JPanel panelinput = new JPanel();
@@ -38,7 +39,7 @@ class View extends javax.swing.JFrame implements java.util.Observer {
         mapView = new Google_Map_UI();
    
         
-		JFrame frame = new JFrame("Elevation Navigation Application");
+//		JFrame frame = new JFrame("Elevation Navigation Application");
 		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.setSize(1280, 900);
 		
@@ -149,9 +150,13 @@ class View extends javax.swing.JFrame implements java.util.Observer {
 
 	@Override
 	public void update(Observable obs, Object obj) {
-		// TODO Auto-generated method stub
+		if (obj.toString().contains("Google_Map_UI")) {
+			mapView = (Google_Map_UI) obj;
+			panelmap.removeAll();
+			panelmap.add(mapView);
+			frame.setVisible(true);
+		}
 		if(obj.toString().equals("true") || obj.toString().equals("false")) {
-			System.out.println("View      : Observable is " + obs.getClass() + ", object passed is " + obj.getClass());
 			jToggleminele.setSelected((boolean) obj);
 			jTogglemaxele.setSelected(!(boolean) obj);
 		}
@@ -160,6 +165,7 @@ class View extends javax.swing.JFrame implements java.util.Observer {
 			Source.setText(obj.toString());
 			Destination.setText(obj.toString());
 		}
+		
 		
 	}
 
