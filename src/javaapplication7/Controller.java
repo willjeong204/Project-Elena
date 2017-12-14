@@ -33,15 +33,16 @@ public class Controller implements java.awt.event.ActionListener{
 		case "CLEAR":
 			model.setSource("");
 			model.setDestination("");
-//			view.getMapView().getMap().get
-				//need to figure out how to clear the map.
-//			view.getMapView().getMap().dispose();
+			model.setMapObj(new Google_Map_UI());
 				break;
 			case "GO":
+				String[] inputs = new String[2];
+				inputs[0] = view.getSrc();
+				inputs[1] = view.getDest();
 				//clear the map first then add more.
-				model.setSource(view.getSrc());
-				model.setDestination(view.getDest());
-				view.getMapView().performGeocode(model.getSource(), model.getDestination());
+				model.setSource(inputs[0]);
+				model.setDestination(inputs[1]);
+				view.getMapView().performGeocode(inputs);
 				try {
 					Thread.sleep(1000);
 				} catch (InterruptedException e2) {

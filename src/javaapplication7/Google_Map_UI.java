@@ -130,93 +130,58 @@ public class Google_Map_UI extends MapView {
         });
     }
     
-    public void performGeocode(String src, String dest) {
+    public void performGeocode(String[] inputs) {
         // Getting the associated map object
         final Map map = getMap();
         // Creating a geocode request
-        GeocoderRequest requestsrc = new GeocoderRequest();
-        // Setting address to the geocode request
-        requestsrc.setAddress(src);
-
-        // Geocoding position by the entered address
-        getServices().getGeocoder().geocode(requestsrc, new GeocoderCallback(map) {
-            @Override
-            public void onComplete(GeocoderResult[] results, GeocoderStatus status) {
-                // Checking operation status
-                if ((status == GeocoderStatus.OK) && (results.length > 0)) {
-                    // Getting the first result
-                    GeocoderResult result = results[0];      
-                    // Getting a location of the result
-                    LatLng location = result.getGeometry().getLocation();                  
-                    // Setting the map center to result location
-                    srcLatLng = location;           
-                    map.setCenter(location);
-                    // Creating a marker object
-                    final Marker marker = new Marker(map);
-                    // Setting position of the marker to the result location
-                    marker.setPosition(location);
-                    // Creating an information window
-                    InfoWindow infoWindow = new InfoWindow(map);
-                    // Putting the address and location to the content of the information window
-                    infoWindow.setContent("<b>" + result.getFormattedAddress() + "</b><br>" + location.toString());
-                    // Moving the information window to the result location
-                    infoWindow.setPosition(location);
-                    // Showing of the information window
-                    infoWindow.open(map, marker);
-                    
-                    // Adding event listener that intercepts clicking on marker
-                    marker.addEventListener("click", new MapMouseEvent() {
-                        @Override
-                        public void onEvent(MouseEvent mouseEvent) {
-                            // Removing marker from the map
-                            marker.remove();
-                        }
-                    });
+        for(int i=0;i<inputs.length;i++) {
+        		String input = inputs[i];
+        		GeocoderRequest request = new GeocoderRequest();
+            // Setting address to the geocode request
+            request.setAddress(input);
+            
+            // Geocoding position by the entered address
+            getServices().getGeocoder().geocode(request, new GeocoderCallback(map) {
+                @Override
+                public void onComplete(GeocoderResult[] results, GeocoderStatus status) {
+                    // Checking operation status
+                    if ((status == GeocoderStatus.OK) && (results.length > 0)) {
+                        // Getting the first result
+                        GeocoderResult result = results[0];      
+                        // Getting a location of the result
+                        LatLng location = result.getGeometry().getLocation();                  
+                        
+                        if(srcLatLng == null)
+                        		srcLatLng = location;   
+                        else
+                        		destLatLng = location;
+                        	
+                        map.setCenter(location);
+                        // Creating a marker object
+                        final Marker marker = new Marker(map);
+                        // Setting position of the marker to the result location
+                        marker.setPosition(location);
+                        // Creating an information window
+                        InfoWindow infoWindow = new InfoWindow(map);
+                        // Putting the address and location to the content of the information window
+                        infoWindow.setContent("<b>" + result.getFormattedAddress() + "</b><br>" + location.toString());
+                        // Moving the information window to the result location
+                        infoWindow.setPosition(location);
+                        // Showing of the information window
+                        infoWindow.open(map, marker);
+                        
+                        // Adding event listener that intercepts clicking on marker
+                        marker.addEventListener("click", new MapMouseEvent() {
+                            @Override
+                            public void onEvent(MouseEvent mouseEvent) {
+                                // Removing marker from the map
+                                marker.remove();
+                            }
+                        });
+                    }
                 }
-            }
-        });
-        
-        GeocoderRequest requestdest = new GeocoderRequest();
-        // Setting address to the geocode request
-        requestdest.setAddress(dest);
-
-        // Geocoding position by the entered address
-        getServices().getGeocoder().geocode(requestdest, new GeocoderCallback(map) {
-            @Override
-            public void onComplete(GeocoderResult[] results, GeocoderStatus status) {
-                // Checking operation status
-                if ((status == GeocoderStatus.OK) && (results.length > 0)) {
-                    // Getting the first result
-                    GeocoderResult result = results[0];                   
-                    // Getting a location of the result
-                    LatLng location = result.getGeometry().getLocation();
-                    // Setting the map center to result location
-                    destLatLng = location;
-                    map.setCenter(location);
-                    // Creating a marker object
-                    final Marker marker = new Marker(map);
-                    // Setting position of the marker to the result location
-                    marker.setPosition(location);
-                    // Creating an information window
-                    InfoWindow infoWindow = new InfoWindow(map);
-                    // Putting the address and location to the content of the information window
-                    infoWindow.setContent("<b>" + result.getFormattedAddress() + "</b><br>" + location.toString());
-                    // Moving the information window to the result location
-                    infoWindow.setPosition(location);
-                    // Showing of the information window
-                    infoWindow.open(map, marker);
-                    
-                    // Adding event listener that intercepts clicking on marker
-                    marker.addEventListener("click", new MapMouseEvent() {
-                        @Override
-                        public void onEvent(MouseEvent mouseEvent) {
-                            // Removing marker from the map
-                            marker.remove();
-                        }
-                    });
-                }
-            }
-        });
+            });
+        }
     }
     
     public LatLng getsrcLatLng() {

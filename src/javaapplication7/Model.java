@@ -18,6 +18,7 @@ public class Model extends java.util.Observable {
     private String source;
     private String destination;
     private boolean isMax, isMin;
+    private Google_Map_UI map;
     static HashMap<String, ArrayList<String>> adjMatrix;
     static HashMap<String,Integer> indexIDMap = new HashMap<>();
     ArrayList<NodeObject> mapNodes;
@@ -188,5 +189,14 @@ public class Model extends java.util.Observable {
         pw.write(sb.toString());
         sb.delete(0, sb.length());
         pw.flush();
+    }
+    
+    public Google_Map_UI getMapObj() {
+    		return map;
+    }
+    public void setMapObj(Google_Map_UI map) {
+    		this.map = map;
+    		setChanged();
+    	    notifyObservers(map);
     }
 }
