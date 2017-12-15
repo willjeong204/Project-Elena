@@ -7,6 +7,7 @@ import java.awt.event.ActionListener;	//for addController()
 
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 
 //View is an Observer
 import java.awt.*;
@@ -33,7 +34,8 @@ class View extends javax.swing.JFrame implements java.util.Observer {
     private JButton clear = new JButton();
     private JButton go = new JButton();
     private JButton jButtonaddfav = new JButton();
-    private JTable jTableaddfav = new JTable(10, 1);
+    DefaultTableModel model = new DefaultTableModel();
+    private JTable jTableaddfav = new JTable(model);
     public Google_Map_UI mapView;
 	
 	View() {
@@ -86,6 +88,11 @@ class View extends javax.swing.JFrame implements java.util.Observer {
 		jButtonaddfav.setText("Add to my Fav");
 		jButtonaddfav.setActionCommand("ADDFAV");
 		jButtonaddfav.setEnabled(false);
+		jTableaddfav.setEnabled(false);
+		model.addColumn("Name");
+		model.addColumn("lat");
+		model.addColumn("long");
+		JScrollPane jScrolladdfav = new JScrollPane(jTableaddfav);
 		
 		panelinputLayout.setHorizontalGroup(panelinputLayout.createSequentialGroup()
 			.addGroup(panelinputLayout.createSequentialGroup()
@@ -109,7 +116,7 @@ class View extends javax.swing.JFrame implements java.util.Observer {
 					 .addGroup(panelinputLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
 					    		.addComponent(jLabelFav)
 					    		.addGroup(panelinputLayout.createParallelGroup()
-					    				.addComponent(jTableaddfav, GroupLayout.PREFERRED_SIZE, 200, GroupLayout.PREFERRED_SIZE)
+					    				.addComponent(jScrolladdfav, GroupLayout.PREFERRED_SIZE, 200, GroupLayout.PREFERRED_SIZE)
 					    		)
 							 )
 					   
@@ -140,7 +147,7 @@ class View extends javax.swing.JFrame implements java.util.Observer {
 					    		.addComponent(Deviation, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 					    		)
 		    			)
-		    	.addComponent(jTableaddfav, GroupLayout.PREFERRED_SIZE, 200, GroupLayout.PREFERRED_SIZE)	
+		    	.addComponent(jScrolladdfav, GroupLayout.PREFERRED_SIZE, 200, GroupLayout.PREFERRED_SIZE)	
 			    
 		    )
 		    
