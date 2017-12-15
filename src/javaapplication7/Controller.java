@@ -34,12 +34,14 @@ public class Controller implements java.awt.event.ActionListener{
 			break;
 		case "CLEAR":
 			this.goStatus = "";
+			view.disableAddtoFav();
 			model.setSource("");
 			model.setDestination("");
 			model.setMapObj(new Google_Map_UI());
 				break;
 			case "GO":
 				this.goStatus = "Ok";
+				view.enableAddtoFav();
 				String[] inputs = new String[2];
 				inputs[0] = view.getSrc();
 				inputs[1] = view.getDest();
@@ -96,9 +98,10 @@ public class Controller implements java.awt.event.ActionListener{
 				//String routeName= "abc"
 				if(!this.goStatus.equals("Ok")){
 					//To disable if user had not pressed go yet
+					
 				}
 				else{
-					JOptionPane.showConfirmDialog(view, model.getSource() + " and" + model.getDestination() + " has been added to favorites.");
+					JOptionPane.showConfirmDialog(view, model.getSource() + " and " + model.getDestination() + " has been added to favorites.");
 					String routeStr = "";
 					//model.fav_source_dest.add(routeName);
 

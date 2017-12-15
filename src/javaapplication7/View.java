@@ -82,6 +82,7 @@ class View extends javax.swing.JFrame implements java.util.Observer {
 		go.setActionCommand("GO");
 		jButtonaddfav.setText("Add to my Fav");
 		jButtonaddfav.setActionCommand("ADDFAV");
+		jButtonaddfav.setEnabled(false);
 		
 		panelinputLayout.setHorizontalGroup(panelinputLayout.createSequentialGroup()
 			.addGroup(panelinputLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
@@ -147,7 +148,15 @@ class View extends javax.swing.JFrame implements java.util.Observer {
 	public String getDest() {
 		return Destination.getText();
 	}
-
+	
+	public void disableAddtoFav(){
+		this.jButtonaddfav.setEnabled(false);
+	}
+	
+	public void enableAddtoFav(){
+		this.jButtonaddfav.setEnabled(true);
+	}
+	
 	@Override
 	public void update(Observable obs, Object obj) {
 		if (obj.toString().contains("Google_Map_UI")) {
