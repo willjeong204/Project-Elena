@@ -10,6 +10,8 @@ import org.xml.sax.SAXException;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -247,5 +249,20 @@ public class Model extends java.util.Observable {
         pw.write(sb.toString());
         sb.delete(0, sb.length());
         pw.flush();
+    }
+
+    /***
+     * Get the lat-long pairs(separated by ;) from the file to display on the UI
+     * @param routeName Name of the required route.
+     * @return : String with lat-long pairs with ; as the delimiter
+     */
+    public String get_fav_route_by_name(String routeName){ // to get
+        String line = "";
+        try {
+            line = Files.readAllLines(Paths.get("fav_route.csv")).get(fav_route_file_mapping.indexOf(routeName));
+        } catch (IOException | IndexOutOfBoundsException e) {
+            e.printStackTrace();
+        }
+        return line;
     }
 }
