@@ -17,6 +17,7 @@ public class Controller implements java.awt.event.ActionListener{
 	Model model;
 	View view;
 	private String goStatus;
+	private String favPath;
 	Controller() {}
 
 	//invoked when a button is pressed
@@ -59,20 +60,48 @@ public class Controller implements java.awt.event.ActionListener{
 				try {
 					ArrayList<Integer> srcDst = new ArrayList<>();
 					srcDst = model.getNodeId(view.getMapView());
+					if(srcDst.get(0)==-1 && srcDst.get(1)==-1){
+						//pop up window saying invalid source and destination
+						this.goStatus = "";
+						view.disableAddtoFav();
+						model.setSource("");
+						model.setDestination("");
+						model.setMapObj(new Google_Map_UI());
+						JOptionPane.showMessageDialog(view, "Invalid Source and Destination.  Try again.");
+					}else if(srcDst.get(0)==-1){
+						//pop up window saying invalid source
+						this.goStatus = "";
+						view.disableAddtoFav();
+						model.setSource("");
+						model.setMapObj(new Google_Map_UI());
+						JOptionPane.showMessageDialog(view, "Invalid Source.  Try again.");
+					}else if(srcDst.get(1)==-1){
+						//pop up window saying invalid destination
+						this.goStatus = "";
+						view.disableAddtoFav();
+						model.setSource("");
+						model.setMapObj(new Google_Map_UI());
+						JOptionPane.showMessageDialog(view, "Invalid Destination.  Try Again.");
+					}					
+					else{					
+					
 					javaapplication7.FindRoute r = new javaapplication7.FindRoute();
+                                        boolean min = false, max = false;
+                                        
 					try {
 						boolean minimize_elevation = false;
 						if(model.getisMin() == true)
 						{
-							minimize_elevation = true;
+							min = true;
 						}
-						if(model.getisMax()==true)
+                                                else if(model.getisMax()==true)
 						{
-							minimize_elevation = false;
+							max = true;
 						}
 
 
-						model.final_route = r.route(model.mapNodes.get(srcDst.get(0)), model.mapNodes.get(srcDst.get(1)), model.mapNodes, model.indexIDMap,model.adjMatrix,0.5f,model.max_elevation, minimize_elevation);
+						model.final_route = r.route(model.mapNodes.get(srcDst.get(0)), model.mapNodes.get(srcDst.get(1)), model.mapNodes, model.indexIDMap,model.adjMatrix,0.5f,model.max_elevation, min, max);
+						view.getMapView().drawRoute(view.getMapView().getMap(), model);
 					} catch (MalformedURLException ex) {
 						Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
 					} catch (IOException ex) {
@@ -84,15 +113,16 @@ public class Controller implements java.awt.event.ActionListener{
 					} catch (SAXException ex) {
 						Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
 					}
-
+					
+					}
 				} catch (IOException | JSONException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 
 				//store latlng in mode here
-				view.getMapView().drawRoute(view.getMapView().getMap(), model);
-
+				
+				
 				break;
 			case "ADDFAV":
 				//String routeName= "abc"
@@ -101,7 +131,7 @@ public class Controller implements java.awt.event.ActionListener{
 					
 				}
 				else{
-					JOptionPane.showConfirmDialog(view, model.getSource() + " and " + model.getDestination() + " has been added to favorites.");
+					favPath = JOptionPane.showInputDialog(view, "Please enter a name for this route.");
 					String routeStr = "";
 					//model.fav_source_dest.add(routeName);
 

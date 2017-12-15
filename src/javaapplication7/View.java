@@ -121,6 +121,7 @@ class View extends javax.swing.JFrame implements java.util.Observer {
 		    		.addComponent(Deviation, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
 		);
 		
+		
 	}
 
 	public void addController(final ActionListener controller){

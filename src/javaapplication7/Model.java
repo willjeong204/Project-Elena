@@ -10,6 +10,9 @@ import org.xml.sax.SAXException;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -26,7 +29,7 @@ public class Model extends java.util.Observable {
     ArrayList<NodeObject> routeNodes;
     float max_elevation;
     ArrayList<String> final_route = new ArrayList<String>();
-    ArrayList<String> fav_route_mapping = new ArrayList<String>();
+    ArrayList<String> fav_route_file_mapping = new ArrayList<String>();
 
     private String filelocation = System.getProperty("user.dir");
     PrintWriter pw = createFile();
@@ -153,7 +156,10 @@ public class Model extends java.util.Observable {
 		HashMap<String,ArrayList<String>> adjMatrix = new HashMap<>();
 		try
 		{
-			csvReader = new CSVReader(new FileReader("C:\\Users\\shrut\\Documents\\SE\\Project\\Project-Elena\\adjacency_all.csv"),',','"');
+			ArrayList<NodeObject> mapNodes = new ArrayList<NodeObject>();
+	        String filelocation = System.getProperty("user.dir");
+	        File inputFile = new File(filelocation+"/adjacency_all.csv");
+			csvReader = new CSVReader(new FileReader(inputFile),',','"');
 			String[] adjList = null;
 			while((adjList = csvReader.readNext())!=null)
 			{
@@ -201,10 +207,67 @@ public class Model extends java.util.Observable {
 
     private PrintWriter createFile() throws IOException {
 
-
         File file = new File(filelocation+"\\fav_routes.csv");
         file.createNewFile(); // if file already exists will do nothing
         PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(file, true)));
         return out;
+    }
+
+    /**
+     * To populate arrayList with the existing favourite routes.
+     */
+    public void populate_fav_route_list() { // call at the start of the program
+        //Populates the array with the existing routes added under Add-To-Fav
+        File file = new File(filelocation+"\\fav_routes_names.csv");
+
+        try {
+            FileReader fileReader = new FileReader(file);
+            BufferedReader bufferedReader = new BufferedReader(fileReader);
+            String line;
+            while ((line = bufferedReader.readLine()) != null) {
+                fav_route_file_mapping.add(line);
+            }
+            fileReader.close();
+            System.out.println(fav_route_file_mapping);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    /**
+     * Adds routes to both the arrayList of favourite routes and to the file(to store existing routes).
+     * @param routeName: name selected by the user for the route
+     * @throws IOException
+     */
+    public void add_fav_route(String routeName) throws IOException {
+        //add to the arrayList
+        fav_route_file_mapping.add(routeName);
+
+        // add to the file
+        File file = new File(filelocation+"\\fav_routes_names.csv");
+        file.createNewFile();
+        PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(file, true)));
+        StringBuilder sb = new StringBuilder();
+        sb.append(routeName+"\n");
+        pw.write(sb.toString());
+        sb.delete(0, sb.length());
+        pw.flush();
+    }
+
+    /***
+     * Get the lat-long pairs(separated by ;) from the file to display on the UI
+     * @param routeName Name of the required route.
+     * @return : String with lat-long pairs with ; as the delimiter
+     */
+    public String get_fav_route_by_name(String routeName){ // to get
+        String line = "";
+        try {
+            
+            line = Files.readAllLines(Paths.get("fav_route.csv"),StandardCharsets.UTF_8).get(fav_route_file_mapping.indexOf(routeName));
+        } catch (IOException | IndexOutOfBoundsException e) {
+            e.printStackTrace();
+        }
+        return line;
     }
 }
