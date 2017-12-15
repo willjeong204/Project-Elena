@@ -17,6 +17,7 @@ public class Controller implements java.awt.event.ActionListener{
 	Model model;
 	View view;
 	private String goStatus;
+	private String favPath;
 	Controller() {}
 
 	//invoked when a button is pressed
@@ -66,18 +67,21 @@ public class Controller implements java.awt.event.ActionListener{
 						model.setSource("");
 						model.setDestination("");
 						model.setMapObj(new Google_Map_UI());
+						JOptionPane.showMessageDialog(view, "Invalid Source and Destination.  Try again.");
 					}else if(srcDst.get(0)==-1){
 						//pop up window saying invalid source
 						this.goStatus = "";
 						view.disableAddtoFav();
 						model.setSource("");
 						model.setMapObj(new Google_Map_UI());
+						JOptionPane.showMessageDialog(view, "Invalid Source.  Try again.");
 					}else if(srcDst.get(1)==-1){
 						//pop up window saying invalid destination
 						this.goStatus = "";
 						view.disableAddtoFav();
 						model.setSource("");
 						model.setMapObj(new Google_Map_UI());
+						JOptionPane.showMessageDialog(view, "Invalid Destination.  Try Again.");
 					}					
 					else{					
 					
@@ -127,7 +131,7 @@ public class Controller implements java.awt.event.ActionListener{
 					
 				}
 				else{
-					JOptionPane.showConfirmDialog(view, model.getSource() + " and " + model.getDestination() + " has been added to favorites.");
+					favPath = JOptionPane.showInputDialog(view, "Please enter a name for this route.");
 					String routeStr = "";
 					//model.fav_source_dest.add(routeName);
 
