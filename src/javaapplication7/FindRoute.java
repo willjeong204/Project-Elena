@@ -83,7 +83,7 @@ public class FindRoute {
         }
 
         base_url = base_url.substring(0, base_url.length()-1);
-        base_url = base_url + "&key=AIzaSyApjRJ6QYqumJQi6In6aMeWaSCWCrsZTpo";
+        base_url = base_url + "&key=AIzaSyBlp1v9q_A8HUC2BN4ejmnsZQXD2kLbKZI";
 
         URL url = new URL(base_url);
         connection = (HttpURLConnection) url.openConnection();
@@ -199,7 +199,7 @@ public class FindRoute {
             current = open.get(0);
             for(int i=1; i<open.size();i++)
             {
-                if(open.get(i).cost<=current.cost)
+                if(open.get(i).cost<current.cost)
                     current = open.get(i);
                 /*if(open.get(i).cost==current.cost) 
                 {
@@ -230,11 +230,11 @@ public class FindRoute {
                 ArrayList<String> finalpath = new ArrayList<>();
                 while(current.parent!=null)
                 {
-                    System.out.println(current.o.id+"->");
+                    System.out.println(current.o.elevation+"->");
                     finalpath.add(current.o.lat+","+current.o.lng);
                     current = current.parent;
                 }
-                System.out.println(current.o.id);
+                System.out.println(current.o.elevation);
                 finalpath.add(current.o.lat+","+current.o.lng);
                 return finalpath;
             }
@@ -277,7 +277,7 @@ public class FindRoute {
                     if(open.get(j).o.equals(neighbour.o))
                     {
                         found = true;
-                        if(open.get(j).cost<neighbour.cost)
+                        if(open.get(j).cost>neighbour.cost)
                         {
                             open.get(j).cost = neighbour.cost;
                             open.get(j).parent = current;
