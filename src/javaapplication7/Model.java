@@ -207,6 +207,9 @@ public class Model extends java.util.Observable {
         return out;
     }
 
+    /**
+     * To populate arrayList with the existing favourite routes.
+     */
     public void populate_fav_route_list() { // call at the start of the program
         //Populates the array with the existing routes added under Add-To-Fav
         File file = new File(filelocation+"\\fav_routes_names.csv");
@@ -224,5 +227,25 @@ public class Model extends java.util.Observable {
             e.printStackTrace();
         }
 
+    }
+
+    /**
+     * Adds routes to both the arrayList of favourite routes and to the file(to store existing routes).
+     * @param routeName: name selected by the user for the route
+     * @throws IOException
+     */
+    public void add_fav_route(String routeName) throws IOException {
+        //add to the arrayList
+        fav_route_file_mapping.add(routeName);
+
+        // add to the file
+        File file = new File(filelocation+"\\fav_routes_names.csv");
+        file.createNewFile();
+        PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(file, true)));
+        StringBuilder sb = new StringBuilder();
+        sb.append(routeName+"\n");
+        pw.write(sb.toString());
+        sb.delete(0, sb.length());
+        pw.flush();
     }
 }
