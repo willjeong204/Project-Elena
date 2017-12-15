@@ -156,7 +156,10 @@ public class Model extends java.util.Observable {
 		HashMap<String,ArrayList<String>> adjMatrix = new HashMap<>();
 		try
 		{
-			csvReader = new CSVReader(new FileReader("C:\\Users\\shrut\\Documents\\SE\\Project\\Project-Elena\\adjacency_all.csv"),',','"');
+			ArrayList<NodeObject> mapNodes = new ArrayList<NodeObject>();
+	        String filelocation = System.getProperty("user.dir");
+	        File inputFile = new File(filelocation+"/adjacency_all.csv");
+			csvReader = new CSVReader(new FileReader(inputFile),',','"');
 			String[] adjList = null;
 			while((adjList = csvReader.readNext())!=null)
 			{
