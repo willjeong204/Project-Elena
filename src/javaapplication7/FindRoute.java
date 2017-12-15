@@ -26,23 +26,27 @@ import java.util.HashMap;
  */
 public class FindRoute {
 
-    public static float getScore(float g, float h, float e,float percentage,float max_e, boolean minimize_elevation)
+    public static float getScore(float g, float h, float e,float percentage,float max_e, boolean min, boolean max)
     {
         //boolean minimize_elevation = true;
         //float percentage = 100.0f;
         float f;
         //float max_e = 100.0f;
 
-        if(minimize_elevation)
+        if(min)
         {
             f = percentage*(g+h)+e;
             //f = g+h+e;
         }
-        else
+        else if(max)
         {
             float compliment_e = max_e - e;
             f = percentage*(g+h)+compliment_e;
             //f = g+h+compliment_e;
+        }
+        else
+        {
+            f = g + h;
         }
        
         return f;
@@ -149,7 +153,7 @@ public class FindRoute {
      * @param adjMatrix : stores adjacent nodes for the required nodeIDs
      * @return : Boolean if a route was found or not
      */
-    public static ArrayList<String> route(NodeObject source, NodeObject destination, ArrayList<NodeObject> mapNodes, HashMap<String,Integer> indexIDMap, HashMap<String, ArrayList<String>> adjMatrix,float percentage,float max_e, boolean minimize_elevation) throws MalformedURLException, IOException, JDOMException, ParserConfigurationException, SAXException
+    public static ArrayList<String> route(NodeObject source, NodeObject destination, ArrayList<NodeObject> mapNodes, HashMap<String,Integer> indexIDMap, HashMap<String, ArrayList<String>> adjMatrix,float percentage,float max_e, boolean min, boolean max) throws MalformedURLException, IOException, JDOMException, ParserConfigurationException, SAXException
     {
         ArrayList<NodeObject> src = new ArrayList<NodeObject>();
         System.out.println("The s0urce is: " + source.id);
@@ -259,7 +263,7 @@ public class FindRoute {
                 float score = 0.0f;
                 float src_dist = src_distance[0][i];
                 float dst_dist = dst_distance[i][0];
-                score = getScore(src_dist,dst_dist,Float.parseFloat(adj.get(i).elevation),percentage, max_e,minimize_elevation);
+                score = getScore(src_dist,dst_dist,Float.parseFloat(adj.get(i).elevation),percentage, max_e,min, max);
 
                 Node neighbour;
                 neighbour = new Node(adj.get(i),score,src_dist,dst_dist);

@@ -10,6 +10,7 @@ import org.xml.sax.SAXException;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -259,7 +260,8 @@ public class Model extends java.util.Observable {
     public String get_fav_route_by_name(String routeName){ // to get
         String line = "";
         try {
-            line = Files.readAllLines(Paths.get("fav_route.csv")).get(fav_route_file_mapping.indexOf(routeName));
+            
+            line = Files.readAllLines(Paths.get("fav_route.csv"),StandardCharsets.UTF_8).get(fav_route_file_mapping.indexOf(routeName));
         } catch (IOException | IndexOutOfBoundsException e) {
             e.printStackTrace();
         }

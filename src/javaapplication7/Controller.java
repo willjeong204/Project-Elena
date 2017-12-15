@@ -60,19 +60,21 @@ public class Controller implements java.awt.event.ActionListener{
 					ArrayList<Integer> srcDst = new ArrayList<>();
 					srcDst = model.getNodeId(view.getMapView());
 					javaapplication7.FindRoute r = new javaapplication7.FindRoute();
+                                        boolean min = false, max = false;
+                                        
 					try {
 						boolean minimize_elevation = false;
 						if(model.getisMin() == true)
 						{
-							minimize_elevation = true;
+							min = true;
 						}
-						if(model.getisMax()==true)
+                                                else if(model.getisMax()==true)
 						{
-							minimize_elevation = false;
+							max = true;
 						}
 
 
-						model.final_route = r.route(model.mapNodes.get(srcDst.get(0)), model.mapNodes.get(srcDst.get(1)), model.mapNodes, model.indexIDMap,model.adjMatrix,0.5f,model.max_elevation, minimize_elevation);
+						model.final_route = r.route(model.mapNodes.get(srcDst.get(0)), model.mapNodes.get(srcDst.get(1)), model.mapNodes, model.indexIDMap,model.adjMatrix,0.5f,model.max_elevation, min, max);
 					} catch (MalformedURLException ex) {
 						Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
 					} catch (IOException ex) {
