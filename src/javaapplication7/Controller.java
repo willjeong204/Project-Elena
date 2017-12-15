@@ -70,7 +70,7 @@ public class Controller implements java.awt.event.ActionListener{
 						}
 
 
-						model.final_route = r.route(model.mapNodes.get(srcDst.get(0)), model.mapNodes.get(srcDst.get(1)), model.mapNodes, model.indexIDMap,model.adjMatrix,1.0f,model.max_elevation, minimize_elevation);
+						model.final_route = r.route(model.mapNodes.get(srcDst.get(0)), model.mapNodes.get(srcDst.get(1)), model.mapNodes, model.indexIDMap,model.adjMatrix,0.5f,model.max_elevation, minimize_elevation);
 					} catch (MalformedURLException ex) {
 						Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
 					} catch (IOException ex) {

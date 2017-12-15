@@ -44,6 +44,7 @@ public class FindRoute {
             f = percentage*(g+h)+compliment_e;
             //f = g+h+compliment_e;
         }
+       
         return f;
     }
 
@@ -78,7 +79,7 @@ public class FindRoute {
         }
 
         base_url = base_url.substring(0, base_url.length()-1);
-        base_url = base_url + "&key=AIzaSyCQxWK62DY7Gf4GGxICUzBk3Mcv4FaJB1c";
+        base_url = base_url + "&key=AIzaSyApjRJ6QYqumJQi6In6aMeWaSCWCrsZTpo";
 
         URL url = new URL(base_url);
         connection = (HttpURLConnection) url.openConnection();
@@ -151,22 +152,25 @@ public class FindRoute {
     public static ArrayList<String> route(NodeObject source, NodeObject destination, ArrayList<NodeObject> mapNodes, HashMap<String,Integer> indexIDMap, HashMap<String, ArrayList<String>> adjMatrix,float percentage,float max_e, boolean minimize_elevation) throws MalformedURLException, IOException, JDOMException, ParserConfigurationException, SAXException
     {
         ArrayList<NodeObject> src = new ArrayList<NodeObject>();
-
+        System.out.println("The s0urce is: " + source.id);
         src.add(source);
 
         ArrayList<NodeObject> dst = new ArrayList<NodeObject>();
         dst.add(destination);
-
+        System.out.println("The destination is: "+ destination.id);
         class Node
         {
             NodeObject o;
             float cost;
+            float g,h;
             Node parent;
 
-            Node(NodeObject n_o, float co)
+            Node(NodeObject n_o, float co, float g_dist, float h_dist)
             {
                 o=n_o;
                 cost = co;
+                g = g_dist;
+                h = h_dist;
             }
             Node()
             {
@@ -176,8 +180,12 @@ public class FindRoute {
         ArrayList<Node> open = new ArrayList<Node>();
         ArrayList<NodeObject> closed =  new ArrayList<NodeObject>();
 
+        float src_dest_distance[][];
+        src_dest_distance=getDistances(src, dst);
+        
         Node src_node;
-        src_node = new Node(src.get(0),0.0f);
+        System.out.println(src_dest_distance.length);
+        src_node = new Node(src.get(0),src_dest_distance[0][0],0.0f,src_dest_distance[0][0]);
         src_node.parent = null;
         open.add(src_node);
 
@@ -187,23 +195,42 @@ public class FindRoute {
             current = open.get(0);
             for(int i=1; i<open.size();i++)
             {
-                if(open.get(i).cost<current.cost)
+                if(open.get(i).cost<=current.cost)
                     current = open.get(i);
+                /*if(open.get(i).cost==current.cost) 
+                {
+                    System.out.println("cost was a tie. the h values are: " + open.get(i).h +"v/s" + current.h);
+                    if(open.get(i).h<current.h)
+                    {
+                        
+                        current = open.get(i);
+                    }
+                }*/
             }
 
             open.remove(current);
             closed.add(current.o);
 
+            System.out.println("Current node is: "+current.o.id);
+            if(current.parent == null)
+            {
+                System.out.println("source has no parent");
+            }
+            else{
+            System.out.println("The parent of current node is: "+current.parent.o.id);
+            }
 
             if(current.o.id.equals(dst.get(0).id))
             {
+                System.out.println("The final path is:");
                 ArrayList<String> finalpath = new ArrayList<>();
                 while(current.parent!=null)
                 {
-                    
+                    System.out.println(current.o.id+"->");
                     finalpath.add(current.o.lat+","+current.o.lng);
                     current = current.parent;
                 }
+                System.out.println(current.o.id);
                 finalpath.add(current.o.lat+","+current.o.lng);
                 return finalpath;
             }
@@ -234,8 +261,9 @@ public class FindRoute {
                 float dst_dist = dst_distance[i][0];
                 score = getScore(src_dist,dst_dist,Float.parseFloat(adj.get(i).elevation),percentage, max_e,minimize_elevation);
 
-                Node neighbour = new Node(adj.get(i),score);
-               // System.out.println("Neighbour of " + current.o.id + " is " + neighbour.o.id);
+                Node neighbour;
+                neighbour = new Node(adj.get(i),score,src_dist,dst_dist);
+                System.out.println("Neighbour of " + current.o.id + " is " + neighbour.o.id +"and cost is: "+ String.valueOf(score));
                 if(closed.contains(neighbour.o))
                     continue;
 

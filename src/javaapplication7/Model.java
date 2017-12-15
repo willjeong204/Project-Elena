@@ -35,14 +35,15 @@ public class Model extends java.util.Observable {
 
     public Model() throws JDOMException, SAXException, IOException, Exception{
 
-        adjMatrix = readCSV();
 
-        OsmParsing osm = new OsmParsing();
-        mapNodes = osm.parser();
-        indexIDMap = osm.indexIDMap;
-        max_elevation = osm.max_elevation;
+		OsmParsing osm = new OsmParsing();
+		mapNodes = osm.parser();
+		indexIDMap = osm.indexIDMap;
+                max_elevation = osm.max_elevation;
 
-    }
+                
+		adjMatrix = readCSV();
+	}
 
     public boolean getisMax() {
         return isMax;
@@ -101,87 +102,86 @@ public class Model extends java.util.Observable {
 
         List<String> testArray = new ArrayList<String>();
         HttpURLConnection connection = null;
-        StringBuilder result = new StringBuilder();
-        String base_url = "http://router.project-osrm.org/nearest/v1/foot/";
-        String location = lng + "," +lat;
-        String number = "?number=3";
-        String bearings = "&bearings=0,20";
-        String full_url = base_url+location+number+bearings;
-        System.out.println(full_url);
-        URL url = new URL(full_url);
-        //URL url = new URL("https://maps.googleapis.com/maps/api/directions/json?origin=hadley,MA,US&destination=Umass+amherst,MA,US&mode=bicycling&alternatives=true&key=AIzaSyDbJBCyTJBUmRSrlAOfzc4AbdjBqZgoSRU");
-        connection = (HttpURLConnection) url.openConnection();
-        connection.setRequestMethod("GET");
+		 StringBuilder result = new StringBuilder();
+	        String base_url = "http://router.project-osrm.org/nearest/v1/foot/";
+	        String location = lng + "," +lat;
+	        String number = "?number=3";
+	        String bearings = "&bearings=0,20";
+	        String full_url = base_url+location+number+bearings;
+	        //System.out.println(full_url);
+	        URL url = new URL(full_url);
+	        //URL url = new URL("https://maps.googleapis.com/maps/api/directions/json?origin=hadley,MA,US&destination=Umass+amherst,MA,US&mode=bicycling&alternatives=true&key=AIzaSyDbJBCyTJBUmRSrlAOfzc4AbdjBqZgoSRU");
+	        connection = (HttpURLConnection) url.openConnection();
+	        connection.setRequestMethod("GET");
+	        
+	        BufferedReader rd = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+	        String line;
+	        
+	        while ((line = rd.readLine()) != null) 
+	        {
+	        	//System.out.println(line);       
+	                result.append(line);
+	        }
+	      rd.close();
+	      
+	      HashMap<String,String> srcDest = new HashMap<>();
+	      JSONObject jsonObject = new JSONObject(result.toString());
+	      
+	      JSONArray resultsArray=jsonObject.getJSONArray("waypoints");
+	      String x=null;
+	      for ( int i=0;i<resultsArray.length();i++){
+	    	  JSONObject routeObj=(JSONObject)resultsArray.get(i);
+	          JSONArray legs = routeObj.getJSONArray("nodes");
+	          
+	          for ( int j=0;j<legs.length();j++){
+	              String nodeID=(String)legs.get(j).toString();
+	                  //System.out.println("here"+nodeID);
+	                  if (indexIDMap.containsKey(nodeID)){
+	                  int index = indexIDMap.get(nodeID);
+	                  //System.out.println("index"+index);
+	          				return index;
+	                  }
+	          }
+	     }
+	          
+		return -1;
+	}
 
-        BufferedReader rd = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-        String line;
 
-        while ((line = rd.readLine()) != null)
-        {
-            System.out.println(line);
-            result.append(line);
-        }
-        rd.close();
+	private static HashMap<String, ArrayList<String>> readCSV() {
+		CSVReader csvReader = null;
+		HashMap<String,ArrayList<String>> adjMatrix = new HashMap<>();
+		try
+		{
+			csvReader = new CSVReader(new FileReader("C:\\Users\\shrut\\Documents\\SE\\Project\\Project-Elena\\adjacency_all.csv"),',','"');
+			String[] adjList = null;
+			while((adjList = csvReader.readNext())!=null)
+			{
+				ArrayList<String> lines = new ArrayList<String>();
+				for(int i =1;i<adjList.length;i++){
+					lines.add(adjList[i]);
+				}
+				adjMatrix.put(adjList[0], lines);
+			}
+		}
+		catch(Exception ee)
+		{
+			ee.printStackTrace();
+		}
+		finally
+		{
+			try
+			{
+				csvReader.close();
+			}
+			catch(Exception ee)
+			{
+				ee.printStackTrace();
+			}
+		}
+		return adjMatrix;
 
-        HashMap<String,String> srcDest = new HashMap<>();
-        JSONObject jsonObject = new JSONObject(result.toString());
-
-        JSONArray resultsArray=jsonObject.getJSONArray("waypoints");
-        String x=null;
-        for ( int i=0;i<resultsArray.length();i++){
-            JSONObject routeObj=(JSONObject)resultsArray.get(i);
-            JSONArray legs = routeObj.getJSONArray("nodes");
-
-            for ( int j=0;j<legs.length();j++){
-                String nodeID=(String)legs.get(j).toString();
-                System.out.println("here"+nodeID);
-                if (indexIDMap.containsKey(nodeID)){
-                    int index = indexIDMap.get(nodeID);
-                    System.out.println("index"+index);
-                    return index;
-                }
-            }
-        }
-
-        return -1;
-    }
-
-
-    private static HashMap<String, ArrayList<String>> readCSV() {
-        CSVReader csvReader = null;
-        HashMap<String,ArrayList<String>> adjMatrix = new HashMap<>();
-        String filelocation = System.getProperty("user.dir");
-        try
-        {
-            csvReader = new CSVReader(new FileReader(filelocation+"/adjacency.csv"),',','"');
-            String[] adjList = null;
-            while((adjList = csvReader.readNext())!=null)
-            {
-                ArrayList<String> lines = new ArrayList<String>();
-                for(int i =1;i<adjList.length;i++){
-                    lines.add(adjList[i]);
-                }
-                adjMatrix.put(adjList[0], lines);
-            }
-        }
-        catch(Exception ee)
-        {
-            ee.printStackTrace();
-        }
-        finally
-        {
-            try
-            {
-                csvReader.close();
-            }
-            catch(Exception ee)
-            {
-                ee.printStackTrace();
-            }
-        }
-        return adjMatrix;
-
-    }
+	}
 
     public void writeToFavsFile(String favRouteStr){
         sb.append(favRouteStr+"\n");

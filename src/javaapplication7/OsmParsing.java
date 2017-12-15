@@ -52,6 +52,8 @@ public class OsmParsing {
         String filelocation = System.getProperty("user.dir");
         File inputFile = new File(filelocation+"/map.osm"); //Replace with your location of map.osm
 
+        //File inputFile = new File("C:\\Users\\shrut\\Documents\\SE\\Project\\Project-Elena\\map.osm"); //Replace with your location of map.osm
+
         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
         org.w3c.dom.Document doc = dBuilder.parse(inputFile);
