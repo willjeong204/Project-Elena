@@ -15,6 +15,7 @@ import java.util.HashMap;
 import java.util.List;
 
 public class Model extends java.util.Observable {
+
     private String source;
     private String destination;
     private boolean isMax, isMin;
@@ -27,10 +28,8 @@ public class Model extends java.util.Observable {
     ArrayList<String> final_route = new ArrayList<String>();
     ArrayList<String> fav_route_mapping = new ArrayList<String>();
 
-    //PrintWriter pw = new PrintWriter(new FileOutputStream(
-    //        new File("javaapplication7\\fav_routes.csv"), true));
-    File file = new File ("javaapplication7\\fav_routes.csv");
-    PrintWriter pw = new PrintWriter ("fav_routes.csv");
+    private String filelocation = System.getProperty("user.dir");
+    PrintWriter pw = createFile();
     StringBuilder sb = new StringBuilder();
     ArrayList<String> fav_source_dest = new ArrayList<String>();
 
@@ -52,27 +51,27 @@ public class Model extends java.util.Observable {
         return isMin;
     }
     public void setisMax(boolean value) {
-		isMax = value;
-		setChanged();
-		notifyObservers(value);
+        isMax = value;
+        setChanged();
+        notifyObservers(value);
     }
     public void setisMin(boolean value) {
-      isMin = value;
-      setChanged();
-      notifyObservers(value);
+        isMin = value;
+        setChanged();
+        notifyObservers(value);
     }
     public void setSource(String src) {
-      source = src;
-      setChanged();
-      notifyObservers(src);
+        source = src;
+        setChanged();
+        notifyObservers(src);
     }
     public String getSource() {
-      return source;
+        return source;
     }
     public void setDestination(String dest) {
-      destination = dest;
-      setChanged();
-      notifyObservers(dest);
+        destination = dest;
+        setChanged();
+        notifyObservers(dest);
     }
     public String getDestination() {
         return destination;
@@ -190,13 +189,22 @@ public class Model extends java.util.Observable {
         sb.delete(0, sb.length());
         pw.flush();
     }
-    
+
     public Google_Map_UI getMapObj() {
-    		return map;
+        return map;
     }
     public void setMapObj(Google_Map_UI map) {
-    		this.map = map;
-    		setChanged();
-    	    notifyObservers(map);
+        this.map = map;
+        setChanged();
+        notifyObservers(map);
+    }
+
+    private PrintWriter createFile() throws IOException {
+
+
+        File file = new File(filelocation+"\\fav_routes.csv");
+        file.createNewFile(); // if file already exists will do nothing
+        PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(file, true)));
+        return out;
     }
 }
