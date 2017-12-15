@@ -26,7 +26,7 @@ public class Model extends java.util.Observable {
     ArrayList<NodeObject> routeNodes;
     float max_elevation;
     ArrayList<String> final_route = new ArrayList<String>();
-    ArrayList<String> fav_route_mapping = new ArrayList<String>();
+    ArrayList<String> fav_route_file_mapping = new ArrayList<String>();
 
     private String filelocation = System.getProperty("user.dir");
     PrintWriter pw = createFile();
@@ -201,10 +201,28 @@ public class Model extends java.util.Observable {
 
     private PrintWriter createFile() throws IOException {
 
-
         File file = new File(filelocation+"\\fav_routes.csv");
         file.createNewFile(); // if file already exists will do nothing
         PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(file, true)));
         return out;
+    }
+
+    public void populate_fav_route_list() { // call at the start of the program
+        //Populates the array with the existing routes added under Add-To-Fav
+        File file = new File(filelocation+"\\fav_routes_names.csv");
+
+        try {
+            FileReader fileReader = new FileReader(file);
+            BufferedReader bufferedReader = new BufferedReader(fileReader);
+            String line;
+            while ((line = bufferedReader.readLine()) != null) {
+                fav_route_file_mapping.add(line);
+            }
+            fileReader.close();
+            System.out.println(fav_route_file_mapping);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 }
