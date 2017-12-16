@@ -36,8 +36,8 @@ class View extends javax.swing.JFrame implements java.util.Observer {
     private JButton clear = new JButton();
     private JButton go = new JButton();
     private JButton jButtonaddfav = new JButton();
-    DefaultTableModel model = new DefaultTableModel();
-    private JTable jTableaddfav = new JTable(model);
+    DefaultTableModel favmodel = new DefaultTableModel();
+    private JTable jTableaddfav = new JTable(favmodel);
     public Google_Map_UI mapView;
 	
 	View() {
@@ -92,9 +92,9 @@ class View extends javax.swing.JFrame implements java.util.Observer {
 		jButtonaddfav.setActionCommand("ADDFAV");
 		jButtonaddfav.setEnabled(false);
 		jTableaddfav.setEnabled(false);
-		model.addColumn("Name");
-		model.addColumn("lat");
-		model.addColumn("long");
+		favmodel.addColumn("Name");
+		favmodel.addColumn("lat");
+		favmodel.addColumn("long");
 		JScrollPane jScrolladdfav = new JScrollPane(jTableaddfav);
 		
 		panelinputLayout.setHorizontalGroup(panelinputLayout.createSequentialGroup()
