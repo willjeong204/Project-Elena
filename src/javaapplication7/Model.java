@@ -99,6 +99,15 @@ public class Model extends java.util.Observable {
         return srcDestIndex;
 
     }
+
+    /***
+     * Converts latitude - longitude obtained from google maps API to the nearest OSM node
+     * @param lat latitude
+     * @param lng longitude
+     * @return : The index of the nearest node found. Returns -1 if the node is not found.
+     * @throws IOException
+     * @throws JSONException
+     */
     private int getId(Double lat,Double lng) throws IOException, JSONException {
         // TODO Auto-generated method stub
         //http://router.project-osrm.org/nearest/v1/driving/13.388860,52.517037?number=3&bearings=0,20
@@ -150,7 +159,10 @@ public class Model extends java.util.Observable {
 		return -1;
 	}
 
-
+    /***
+     * Reads adjacency_all csv to get information of adjacent nodes for each index.
+     * @return a matrix describing the adjacency relationship between nodes.
+     */
 	private static HashMap<String, ArrayList<String>> readCSV() {
 		CSVReader csvReader = null;
 		HashMap<String,ArrayList<String>> adjMatrix = new HashMap<>();
@@ -189,6 +201,10 @@ public class Model extends java.util.Observable {
 
 	}
 
+    /***
+     * write latitude and longitude information of the favourite path to a csv file
+     * @param favRouteStr : string containing latitude-longitude pairs for the favourite-route
+     */
     public void writeToFavsFile(String favRouteStr){
         sb.append(favRouteStr+"\n");
         pw.write(sb.toString());
@@ -205,6 +221,11 @@ public class Model extends java.util.Observable {
         notifyObservers(map);
     }
 
+    /**
+     * Creates/initializes a file to store favourite routes
+     * @return a printWriter in append mode
+     * @throws IOException
+     */
     private PrintWriter createFile() throws IOException {
 
         File file = new File(filelocation+"\\fav_routes.csv");
