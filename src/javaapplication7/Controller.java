@@ -141,16 +141,18 @@ public class Controller implements java.awt.event.ActionListener{
 					{
 						routeStr += s + ";";
 					}
-
-					model.writeToFavsFile(routeStr);
+					
+					model.populate_fav_route_list();
 					try {
 						model.add_fav_route(routeStr);
 					} catch (IOException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
-					model.populate_fav_route_list();
-					view.favmodel.addRow(new Object[] { favPath, model.get_fav_route_by_name(model.final_route.toString())});
+					
+					model.writeToFavsFile(routeStr);
+					
+					view.favmodel.addRow(new Object[] { "favPath",  model.get_fav_route_by_name(routeStr)});
 					this.goStatus = "";
 				}
 				
