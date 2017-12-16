@@ -25,7 +25,6 @@ import java.util.HashMap;
  * Maximum elevation or the shortest root(if not mentioned))
  */
 public class FindRoute {
-
     public static float getScore(float g, float h, float e,float percentage,float max_e, boolean min, boolean max)
     {
         //boolean minimize_elevation = true;
@@ -59,7 +58,7 @@ public class FindRoute {
      * @return : Distances between source and desination
      *
      */
-    public static float[][] getDistances(ArrayList<NodeObject> src, ArrayList<NodeObject> dst) throws MalformedURLException, IOException, JDOMException, ParserConfigurationException, SAXException
+    public static float[][] getDistances(String apikey, ArrayList<NodeObject> src, ArrayList<NodeObject> dst) throws MalformedURLException, IOException, JDOMException, ParserConfigurationException, SAXException
     {
 
         HttpURLConnection connection = null;
@@ -83,7 +82,7 @@ public class FindRoute {
         }
 
         base_url = base_url.substring(0, base_url.length()-1);
-        base_url = base_url + "&key=AIzaSyBlp1v9q_A8HUC2BN4ejmnsZQXD2kLbKZI";
+        base_url = base_url + "&key=" + apikey;
 
         URL url = new URL(base_url);
         connection = (HttpURLConnection) url.openConnection();
@@ -153,7 +152,7 @@ public class FindRoute {
      * @param adjMatrix : stores adjacent nodes for the required nodeIDs
      * @return : Boolean if a route was found or not
      */
-    public static ArrayList<String> route(NodeObject source, NodeObject destination, ArrayList<NodeObject> mapNodes, HashMap<String,Integer> indexIDMap, HashMap<String, ArrayList<String>> adjMatrix,float percentage,float max_e, boolean min, boolean max) throws MalformedURLException, IOException, JDOMException, ParserConfigurationException, SAXException
+    public static ArrayList<String> route(String apikey, NodeObject source, NodeObject destination, ArrayList<NodeObject> mapNodes, HashMap<String,Integer> indexIDMap, HashMap<String, ArrayList<String>> adjMatrix,float percentage,float max_e, boolean min, boolean max) throws MalformedURLException, IOException, JDOMException, ParserConfigurationException, SAXException
     {
         ArrayList<NodeObject> src = new ArrayList<NodeObject>();
         System.out.println("The s0urce is: " + source.id);
@@ -185,7 +184,7 @@ public class FindRoute {
         ArrayList<NodeObject> closed =  new ArrayList<NodeObject>();
 
         float src_dest_distance[][];
-        src_dest_distance=getDistances(src, dst);
+        src_dest_distance=getDistances(apikey, src, dst);
         
         Node src_node;
         System.out.println(src_dest_distance.length);
@@ -253,10 +252,10 @@ public class FindRoute {
             ArrayList<NodeObject> cur_list = new ArrayList<NodeObject>();
             cur_list.add(current.o);
 
-            src_distance = getDistances(cur_list, adj);
+            src_distance = getDistances(apikey,cur_list, adj);
 
             float dst_distance[][];
-            dst_distance = getDistances(adj,dst);
+            dst_distance = getDistances(apikey,adj,dst);
 
             for(int i=0;i<adj.size();i++)
             {

@@ -26,9 +26,11 @@ class View extends javax.swing.JFrame implements java.util.Observer {
 	private JLabel jLabelend = new JLabel();
 	private JLabel jLabelDev = new JLabel();
 	private JLabel jLabelFav = new JLabel();
+	private JLabel jLabelApi = new JLabel();
 	private JTextField Destination = new JTextField();
     private JTextField Source = new JTextField();
     private JTextField Deviation = new JTextField();
+    private JTextField Apikey = new JTextField();
     private JToggleButton jToggleminele = new JToggleButton();
     private JToggleButton jTogglemaxele = new JToggleButton();
     private JButton clear = new JButton();
@@ -72,11 +74,12 @@ class View extends javax.swing.JFrame implements java.util.Observer {
 		
 		jLabelstart.setText("Starting Point: ");
 		jLabelend.setText("Ending Point: ");
-		jLabelDev.setText("Enter Decimal Deviation: ");
+		jLabelDev.setText("Enter Deviation (%): ");
 		jLabelFav.setText("Favorite Routes");
+		jLabelApi.setText("Enter your API key here: ");
 		Source.setText("");
 		Destination.setText("");
-		Deviation.setText("");
+		Deviation.setText("0");
 		jTogglemaxele.setText("Maximum Elevation");
 		jTogglemaxele.setActionCommand("MAX");
 		jToggleminele.setText("Minimum Elevation");
@@ -96,64 +99,53 @@ class View extends javax.swing.JFrame implements java.util.Observer {
 		
 		panelinputLayout.setHorizontalGroup(panelinputLayout.createSequentialGroup()
 			.addGroup(panelinputLayout.createSequentialGroup()
-					.addGroup(panelinputLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-							.addComponent(jLabelstart)
-							.addComponent(jLabelend)
-							.addComponent(jLabelDev))
-					    .addGroup(panelinputLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-					    		.addComponent(jToggleminele)
-					    		.addComponent(Source, GroupLayout.PREFERRED_SIZE, 200, GroupLayout.PREFERRED_SIZE)
-					    		.addComponent(Destination, GroupLayout.PREFERRED_SIZE, 200, GroupLayout.PREFERRED_SIZE)
-					    		.addComponent(Deviation, GroupLayout.PREFERRED_SIZE, 200, GroupLayout.PREFERRED_SIZE))
-					    .addGroup(panelinputLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-					    		.addComponent(jTogglemaxele)
-					    		.addGroup(panelinputLayout.createSequentialGroup()
-					    			.addComponent(clear)
-					    			.addComponent(go))
-					    		.addComponent(jButtonaddfav)
-					    		//.addComponent(jTableaddfav)
-					    )
-					 .addGroup(panelinputLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-					    		.addComponent(jLabelFav)
-					    		.addGroup(panelinputLayout.createParallelGroup()
-					    				.addComponent(jScrolladdfav, GroupLayout.PREFERRED_SIZE, 200, GroupLayout.PREFERRED_SIZE)
-					    		)
-							 )
-					   
-					)
-			
-		);
+				.addGroup(panelinputLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+						.addComponent(jLabelstart)
+						.addComponent(jLabelend)
+						.addComponent(jLabelDev)
+						.addComponent(jLabelApi))
+				    .addGroup(panelinputLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+				    		.addComponent(jToggleminele)
+				    		.addComponent(Source, GroupLayout.PREFERRED_SIZE, 200, GroupLayout.PREFERRED_SIZE)
+				    		.addComponent(Destination, GroupLayout.PREFERRED_SIZE, 200, GroupLayout.PREFERRED_SIZE)
+				    		.addComponent(Deviation, GroupLayout.PREFERRED_SIZE, 200, GroupLayout.PREFERRED_SIZE)
+				    		.addComponent(Apikey, GroupLayout.PREFERRED_SIZE, 200, GroupLayout.PREFERRED_SIZE))
+				    .addGroup(panelinputLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+				    		.addComponent(jTogglemaxele)
+				    		.addGroup(panelinputLayout.createSequentialGroup()
+				    			.addComponent(clear)
+				    			.addComponent(go))
+				    		.addComponent(jButtonaddfav))
+				 .addGroup(panelinputLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+				    		.addComponent(jLabelFav)
+				    		.addGroup(panelinputLayout.createParallelGroup()
+				    			.addComponent(jScrolladdfav, GroupLayout.PREFERRED_SIZE, 200, GroupLayout.PREFERRED_SIZE)
+		))));
 					
 		panelinputLayout.setVerticalGroup(panelinputLayout.createSequentialGroup()
 		    .addGroup(panelinputLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
 		    		.addComponent(jTogglemaxele)
 				.addComponent(jToggleminele)
-				.addComponent(jLabelFav)
-				)
+				.addComponent(jLabelFav))
 		    .addGroup(panelinputLayout.createParallelGroup()
-		    	.addGroup(panelinputLayout.createSequentialGroup()
+			    	.addGroup(panelinputLayout.createSequentialGroup()
 		    			.addGroup(panelinputLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-					    		.addComponent(jLabelstart)
-					    		.addComponent(Source, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-					    		.addComponent(clear)
-				    			.addComponent(go)
-				    			)
-					    .addGroup(panelinputLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-					    		.addComponent(jLabelend)
-					    		.addComponent(Destination, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-					    		.addComponent(jButtonaddfav))
-					    .addGroup(panelinputLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-					    		.addComponent(jLabelDev)
-					    		.addComponent(Deviation, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-					    		)
-		    			)
-		    	.addComponent(jScrolladdfav, GroupLayout.PREFERRED_SIZE, 200, GroupLayout.PREFERRED_SIZE)	
-			    
-		    )
-		    
-		);
-		
-		
+				    		.addComponent(jLabelstart)
+				    		.addComponent(Source, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+				    		.addComponent(clear)
+			    			.addComponent(go))
+					.addGroup(panelinputLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+				    		.addComponent(jLabelend)
+				    		.addComponent(Destination, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+				    		.addComponent(jButtonaddfav))
+					.addGroup(panelinputLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+				    		.addComponent(jLabelDev)
+				    		.addComponent(Deviation, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+			    		.addGroup(panelinputLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+				    		.addComponent(jLabelApi)
+				    		.addComponent(Apikey, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
+			    	.addComponent(jScrolladdfav, GroupLayout.PREFERRED_SIZE, 200, GroupLayout.PREFERRED_SIZE))
+		    );
 	}
 
 	public void addController(final ActionListener controller){
@@ -181,6 +173,9 @@ class View extends javax.swing.JFrame implements java.util.Observer {
 	public String getDest() {
 		return Destination.getText();
 	}
+	public float getDev() {
+		return Float.parseFloat(Deviation.getText());
+	}
 	
 	public void disableAddtoFav(){
 		this.jButtonaddfav.setEnabled(false);
@@ -189,7 +184,13 @@ class View extends javax.swing.JFrame implements java.util.Observer {
 	public void enableAddtoFav(){
 		this.jButtonaddfav.setEnabled(true);
 	}
-	
+	public void clearMaxMin() {
+		jToggleminele.setSelected(false);
+		jTogglemaxele.setSelected(false);
+	}
+	public String getApiKey() {
+		return Apikey.getText();
+	}
 	@Override
 	public void update(Observable obs, Object obj) {
 		if (obj.toString().contains("Google_Map_UI")) {

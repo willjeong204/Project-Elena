@@ -32,7 +32,8 @@ public class Google_Map_UI extends MapView {
 	InfoWindow infoWindow;
 	static public LatLng srcLatLng;
 	static public LatLng destLatLng;
-	
+	String[] colorlist = {"#FF0000","#00FF00","#0000FF"};
+	int colorint = 0;
     public Google_Map_UI() {
     		// Setting of a ready handler to MapView object. onMapReady will be called when map initialization is done and
     		// the map object is ready to use. Current implementation of onMapReady customizes the map object.
@@ -85,10 +86,14 @@ public class Google_Map_UI extends MapView {
         polyline.setPath(path);
         PolylineOptions options = new PolylineOptions();
         options.setGeodesic(true);
-        options.setStrokeColor("#FF0000");
+        options.setStrokeColor(colorlist[colorint]);
         options.setStrokeOpacity(1.0);
         options.setStrokeWeight(2.0);
         polyline.setOptions(options);
+        colorint++;
+        if(colorint >3) {
+        		colorint = 0;
+        }
     }
     
     

@@ -21,6 +21,8 @@ public class Model extends java.util.Observable {
 
     private String source;
     private String destination;
+    private String apikey;
+    private float deviation;
     private boolean isMax, isMin;
     private Google_Map_UI map;
     static HashMap<String, ArrayList<String>> adjMatrix;
@@ -47,7 +49,12 @@ public class Model extends java.util.Observable {
                 
 		adjMatrix = readCSV();
 	}
-
+    public void setDeviation(float dev) {
+    		deviation = dev/100;
+    }
+    public float getDeviation() {
+    		return deviation;
+    }
     public boolean getisMax() {
         return isMax;
     }
@@ -80,17 +87,19 @@ public class Model extends java.util.Observable {
     public String getDestination() {
         return destination;
     }
-
+    public void setAPIKey(String key) {
+    		apikey = key;
+    }
+    public String getAPIKey() {
+    		return apikey;
+    }
     public ArrayList<Integer> getNodeId(Google_Map_UI mapView) throws IOException, JSONException{
         //Google_Map_UI ui =new Google_Map_UI();
-        double srcLat = mapView.getsrcLatLng().getLat();//
+        double srcLat = mapView.getsrcLatLng().getLat();
         double srcLng = mapView.getsrcLatLng().getLng();
-        System.out.println(srcLat);
-        System.out.println(srcLng);
         double dstLat = mapView.destLatLng.getLat();
         double dstLng = mapView.destLatLng.getLng() ;
-        System.out.println(dstLat);
-        System.out.println(dstLng);
+        
         ArrayList<Integer> srcDestIndex = new ArrayList<>();
         int srcIndex = getId(srcLat,srcLng);
         int dstIndex = getId(dstLat,dstLng);
