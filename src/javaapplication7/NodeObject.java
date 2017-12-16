@@ -5,15 +5,15 @@
 package javaapplication7;
 
 /**
- *
+ * Class describing the NodeObject
  * @author shrut
  */
 public class NodeObject {
     
-    String lat;
-    String lng;
-    String id;
-    String elevation;
+    String lat; // latitude
+    String lng; // longitude
+    String id; // ID
+    String elevation; // elevation of the node
     int index;
     
     
