@@ -143,6 +143,7 @@ public class Controller implements java.awt.event.ActionListener{
 					}
 
 					model.writeToFavsFile(routeStr);
+					view.favmodel.addRow(new Object[] { favPath, routeStr });
 					this.goStatus = "";
 				}
 				
