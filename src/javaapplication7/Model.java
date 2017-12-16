@@ -46,7 +46,8 @@ public class Model extends java.util.Observable {
 		indexIDMap = osm.indexIDMap;
                 max_elevation = osm.max_elevation;
 
-                
+        isMax = false;
+        isMin = false;
 		adjMatrix = readCSV();
 	}
     public void setDeviation(float dev) {
