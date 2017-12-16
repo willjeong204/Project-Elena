@@ -80,6 +80,7 @@ class View extends javax.swing.JFrame implements java.util.Observer {
 		Source.setText("");
 		Destination.setText("");
 		Deviation.setText("0");
+		Apikey.setText("AIzaSyDsh7Puc0rn4gjNr10kwBORflRmaPepJTk");
 		jTogglemaxele.setText("Maximum Elevation");
 		jTogglemaxele.setActionCommand("MAX");
 		jToggleminele.setText("Minimum Elevation");
