@@ -52,6 +52,7 @@ public class Controller implements java.awt.event.ActionListener{
 			model.setSource(inputs[0]);
 			model.setDestination(inputs[1]);
 			model.setDeviation(view.getDev());
+			model.setAPIKey(view.getApiKey());
 			view.getMapView().performGeocode(inputs);
 			try {
 				Thread.sleep(1000);
@@ -97,12 +98,10 @@ public class Controller implements java.awt.event.ActionListener{
 					{
 						min = true;
 					}
-                                            else if(model.getisMax()==true)
+                    else if(model.getisMax()==true)
 					{
 						max = true;
 					}
-
-
 					model.final_route = r.route(model.getAPIKey(), model.mapNodes.get(srcDst.get(0)), model.mapNodes.get(srcDst.get(1)), model.mapNodes, model.indexIDMap,model.adjMatrix, 1.0f-model.getDeviation(), model.max_elevation, min, max);
 					view.getMapView().drawRoute(view.getMapView().getMap(), model);
 				} catch (MalformedURLException ex) {
